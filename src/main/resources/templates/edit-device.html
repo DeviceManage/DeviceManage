@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>编辑设备</title>
+</head>
+<body>
+<h1>编辑设备</h1>
+<form th:action="@{'/devices/edit/' + ${device.did}}" th:object="${device}" method="post" enctype="multipart/form-data">
+  <div>
+    <label for="dname">名称:</label>
+    <input type="text" id="dname" th:field="*{dname}" />
+  </div>
+  <div>
+    <label for="dtype">型号:</label>
+    <input type="text" id="dtype" th:field="*{dtype}" />
+  </div>
+  <div>
+    <label for="dimage">图片:</label>
+    <!-- 现有图片预览 -->
+    <img th:src="@{'/getimage/' + ${device.dimage}}" th:alt="${device.dname}" width="100" />
+    <!-- 文件上传输入 -->
+    <input type="file" id="dimage" name="image" accept="image/*" onchange="previewImage(event)" />
+  </div>
+<!--  <div>-->
+<!--    <p>预览新增图片:</p>-->
+<!--    <img id="preview" width="100" />-->
+<!--  </div>-->
+  <div>
+    <label for="buydate">购入日期:</label>
+    <input type="date" id="buydate" th:field="*{buydate}" />
+  </div>
+  <div>
+    <label for="detail">详情:</label>
+    <textarea id="detail" th:field="*{detail}"></textarea>
+  </div>
+  <div>
+    <button type="submit">保存</button>
+  </div>
+</form>
+<a href="/devices/">取消</a>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    document.getElementById("dimage").addEventListener("change", previewImage);
+  });
+
+  function previewImage(event) {
+    var reader = new FileReader();
+    reader.onload = function() {
+      var output = document.getElementById('previewImage');
+      output.src = reader.result;
+    };
+    if (event.target.files.length > 0) {
+      reader.readAsDataURL(event.target.files[0]);
+    } else {
+      document.getElementById('previewImage').src = '';
+    }
+  }
+</script>
+</body>
+</html>

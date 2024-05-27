@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>设备详情</title>
+</head>
+<body>
+<h1>设备详情</h1>
+<div>
+    <p><strong>名称:</strong> <span th:text="${device.getDname()}"></span></p>
+    <p><strong>类型:</strong> <span th:text="${device.getDtype()}"></span></p>
+    <p><strong>购入日期:</strong> <span th:text="${device.getFormattedBuydate()}"></span></p>
+    <p><strong>详细信息:</strong> <span th:text="${device.getDetail()}"></span></p>
+    <div>
+        <img th:src="@{'/getimage/' + ${device.getDimage()}}" alt="设备图片" width="300">
+    </div>
+</div>
+<a th:href="@{'/devices/edit/' + ${device.did}}">编辑</a>
+<a href="/devices">返回设备列表</a>
+</body>
+</html>
