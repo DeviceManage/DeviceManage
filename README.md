@@ -29,9 +29,14 @@
 + 设备借出管理
 + 前端优化
 
-## 数据库与实体设计
 
-### 设备
+## 项目结构
+
+Spring Boot + Thymeleaf + PostgreSQL
+
+### Entity
+
+#### 设备
 
 | 属性      | 说明                              |
 |---------|---------------------------------|
@@ -40,11 +45,34 @@
 | dtype   | 设备属性，int值，0代表计算机，1代表家具类，2代表其他仪器 |
 | dimage  | 设备图片的路径，限长255字节                 |
 | buydate | 设备购入日期                          |
-| detail  | 设备说明（型号规格等）                     |
+| detail  | 设备说明（型号规格等）
 
+### Service
 
-## 项目结构
+#### DeviceRepository
 
-Spring Boot + Thymeleaf + PostgreSQL
+这是Spring Data JPA中的仓库接口，用来跟数据库建立连接和进行查询。数据库连接选项配置在`application.properties`，连接的是放在公网服务器上的postgresql
+
+（**Warning**:在将项目最终开放为public前务必脱敏，把连接配置删掉。）
+
+#### DeviceService
+
+这里是数据操作的核心逻辑。
+
+#### 
 
 ### Controller
+
+#### IndexController `/`
+
+根路由，目前直接重定向到`/devices/`，后续需要加入身份验证等功能
+
+#### ImageController `/getimage/{hash}`
+
+用于返回图片，图片存储在src/main/resourses/static/images/，文件名规则是上传时间戳做sha256取前一半加jpg后缀。
+
+#### DeviceController `/devices`
+
++ `/` 返回设备列表
++ `/{id}` 查询单个设备
++ `/edit/{id}` 用GET请求是展示表单，用POST请求是进行修改的api
