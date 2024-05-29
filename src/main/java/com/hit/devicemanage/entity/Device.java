@@ -98,4 +98,16 @@ public class Device {
         }
         return "";
     }
+
+    public String getTypeName()
+    {
+        if (dtype == 0) {
+            return "设备";
+        } else if (dtype == 1) {
+            return "家具";
+        } else if (dtype == 2) {
+            return "其他";
+        }
+        return "未知";
+    }
 }

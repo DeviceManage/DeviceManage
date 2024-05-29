@@ -21,7 +21,7 @@ public class MainController {
     @Autowired
     private SiteuserService siteuserService;
 
-    @GetMapping("/main")
+    @GetMapping({"/main","/main/"})
     public String main(Model model, HttpSession session, HttpServletRequest request) {
         String username = (String) session.getAttribute("username");
         if (username == null) {

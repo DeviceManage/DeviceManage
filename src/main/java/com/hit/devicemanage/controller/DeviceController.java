@@ -33,12 +33,12 @@ public class DeviceController {
     @Autowired
     private SiteuserService siteuserService;
 
-    @GetMapping("/devices")
-    public String index(Model model) {
-        List<Device> devices = deviceService.getAllDevices();
-        model.addAttribute("devices", devices);
-        return "devices";  // 返回Thymeleaf模板
-    }
+//    @GetMapping("/devices")
+//    public String index(Model model) {
+//        List<Device> devices = deviceService.getAllDevices();
+//        model.addAttribute("devices", devices);
+//        return "devices";  // 返回Thymeleaf模板
+//    }
     // 查询单个设备
     @GetMapping("/{id}")
     public String getDeviceById(@PathVariable Long id, Model model) {
@@ -147,5 +147,11 @@ public class DeviceController {
             }
             return formatter.toString();
         }
+    }
+
+    @PostMapping("/delete/{id}")
+    public String deleteDevice(@PathVariable("id") Long id) {
+        deviceService.deleteDevice(id);
+        return "redirect:/main";  // 重定向到设备列表页面
     }
 }

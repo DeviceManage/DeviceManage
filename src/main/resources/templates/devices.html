@@ -19,7 +19,7 @@
     <tbody>
     <tr th:each="device : ${devices}">
         <td th:text="${device.getDname()}"></td>
-        <td th:text="${device.getDtype()}"></td>
+        <td th:text="${device.getTypeName()}"></td>
         <td th:text="${device.getFormattedBuydate()}"></td>
         <td>
             <img th:src="@{'/getimage/' + ${device.getDimage()}}" alt="设备图片" width="100">

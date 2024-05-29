@@ -1,43 +1,80 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <title>编辑设备</title>
+  <title>编辑设备 - HIT小型购物网站</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.2.3/css/bootstrap.min.css" rel="stylesheet"  crossorigin="anonymous">
 </head>
 <body>
-<h1>编辑设备</h1>
-<form th:action="@{'/devices/edit/' + ${device.did}}" th:object="${device}" method="post" enctype="multipart/form-data">
-  <div>
-    <label for="dname">名称:</label>
-    <input type="text" id="dname" th:field="*{dname}" />
+
+<header>
+  <!-- 与之前一致的导航栏 -->
+  <div class="navbar navbar-dark bg-dark shadow-sm">
+    <div class="container">
+      <a href="/index" class="navbar-brand d-flex align-items-center">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-cart" viewBox="0 0 16 16">
+          <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+        </svg>
+        <strong>&nbsp;主页</strong>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    </div>
   </div>
-  <div>
-    <label for="dtype">型号:</label>
-    <input type="text" id="dtype" th:field="*{dtype}" />
+</header>
+
+<main class="container py-5">
+  <h1 class="mb-4">编辑设备</h1>
+  <form th:action="@{'/devices/edit/' + ${device.did}}" th:object="${device}" method="post" enctype="multipart/form-data" class="row g-3">
+    <div class="col-md-6">
+      <label for="dname" class="form-label">名称:</label>
+      <input type="text" id="dname" th:field="*{dname}" class="form-control" />
+    </div>
+    <div class="col-md-6">
+      <label for="dtype" class="form-label">型号:</label>
+      <select id="dtype" th:field="*{dtype}" class="form-select">
+        <option th:value="0" th:text="'设备'" th:selected="${device.dtype == 0}"></option>
+        <option th:value="1" th:text="'家具'" th:selected="${device.dtype == 1}"></option>
+        <option th:value="2" th:text="'其他'" th:selected="${device.dtype == 2}"></option>
+      </select>
+    </div>
+    <div class="col-md-6">
+      <label for="dimage" class="form-label">图片:</label>
+      <!-- 现有图片预览 -->
+      <img th:src="@{'/getimage/' + ${device.dimage}}" th:alt="${device.dname}" class="img-thumbnail mb-2" style="max-width: 100px;" />
+      <!-- 文件上传输入 -->
+      <input type="file" id="dimage" name="image" accept="image/*" class="form-control" />
+    </div>
+    <div class="col-md-6">
+      <label for="buydate" class="form-label">购入日期:</label>
+      <input type="date" id="buydate" th:field="*{buydate}" class="form-control" />
+    </div>
+    <div class="col-12">
+      <label for="detail" class="form-label">详情:</label>
+      <textarea id="detail" th:field="*{detail}" class="form-control"></textarea>
+    </div>
+    <div class="col-12 d-flex justify-content-between">
+      <button type="submit" class="btn btn-primary">保存</button>
+      <a href="/main" class="btn btn-secondary">取消</a>
+    </div>
+  </form>
+  <form th:action="@{'/devices/delete/' + ${device.did}}" method="post" class="mt-3">
+    <button type="submit" class="btn btn-danger">删除</button>
+  </form>
+</main>
+
+<footer class="text-muted py-5 bg-dark text-white">
+  <div class="container">
+    <p class="float-end mb-1">
+      <a href="/" class="text-white">回到首页</a>
+    </p>
+    <p class="mb-1">本网站作者为 &copy; Bootstrap, 但是由伟大的PowerAhuang偷来改造而成</p>
   </div>
-  <div>
-    <label for="dimage">图片:</label>
-    <!-- 现有图片预览 -->
-    <img th:src="@{'/getimage/' + ${device.dimage}}" th:alt="${device.dname}" width="100" />
-    <!-- 文件上传输入 -->
-    <input type="file" id="dimage" name="image" accept="image/*" onchange="previewImage(event)" />
-  </div>
-<!--  <div>-->
-<!--    <p>预览新增图片:</p>-->
-<!--    <img id="preview" width="100" />-->
-<!--  </div>-->
-  <div>
-    <label for="buydate">购入日期:</label>
-    <input type="date" id="buydate" th:field="*{buydate}" />
-  </div>
-  <div>
-    <label for="detail">详情:</label>
-    <textarea id="detail" th:field="*{detail}"></textarea>
-  </div>
-  <div>
-    <button type="submit">保存</button>
-  </div>
-</form>
-<a href="/devices/">取消</a>
+</footer>
+
+<script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.2.3/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 <script>
   document.addEventListener("DOMContentLoaded", function() {
     document.getElementById("dimage").addEventListener("change", previewImage);

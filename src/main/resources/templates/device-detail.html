@@ -1,20 +1,58 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>设备详情</title>
+    <title>设备详情 - HIT小型购物网站</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.2.3/css/bootstrap.min.css" rel="stylesheet"  crossorigin="anonymous">
 </head>
 <body>
-<h1>设备详情</h1>
-<div>
-    <p><strong>名称:</strong> <span th:text="${device.getDname()}"></span></p>
-    <p><strong>类型:</strong> <span th:text="${device.getDtype()}"></span></p>
-    <p><strong>购入日期:</strong> <span th:text="${device.getFormattedBuydate()}"></span></p>
-    <p><strong>详细信息:</strong> <span th:text="${device.getDetail()}"></span></p>
-    <div>
-        <img th:src="@{'/getimage/' + ${device.getDimage()}}" alt="设备图片" width="300">
+
+<header>
+    <div class="navbar navbar-dark bg-dark shadow-sm">
+        <div class="container">
+            <a href="/index" class="navbar-brand d-flex align-items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-cart" viewBox="0 0 16 16">
+                    <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+                </svg>
+                <strong>&nbsp;主页</strong>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
     </div>
-</div>
-<a th:href="@{'/devices/edit/' + ${device.did}}">编辑</a>
-<a href="/devices">返回设备列表</a>
+</header>
+
+<main class="container py-5">
+    <h1 class="mb-4">设备详情</h1>
+    <div class="card mb-4">
+        <div class="card-body">
+            <p><strong>名称:</strong> <span th:text="${device.dname}"></span></p>
+            <p><strong>类型:</strong> <span th:text="${device.getTypeName()}"></span></p>
+            <p><strong>购入日期:</strong> <span th:text="${device.formattedBuydate}"></span></p>
+            <p><strong>详细信息:</strong> <span th:text="${device.detail}"></span></p>
+            <div class="text-center">
+                <img th:src="@{'/getimage/' + ${device.dimage}}" alt="设备图片" class="img-fluid" style="max-width: 300px;">
+            </div>
+        </div>
+    </div>
+    <div class="d-flex justify-content-between">
+        <a th:href="@{'/devices/edit/' + ${device.did}}" class="btn btn-warning btn-lg">编辑</a>
+        <a href="/main" class="btn btn-secondary btn-lg">返回设备列表</a>
+    </div>
+</main>
+
+<footer class="text-muted py-5 bg-dark text-white">
+    <div class="container">
+        <p class="float-end mb-1">
+            <a href="/" class="text-white">回到首页</a>
+        </p>
+        <p class="mb-1">本网站作者为  &copy; Bootstrap, 但是由伟大的PowerAhuang偷来改造而成</p>
+    </div>
+</footer>
+
+<script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.2.3/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+
 </body>
 </html>

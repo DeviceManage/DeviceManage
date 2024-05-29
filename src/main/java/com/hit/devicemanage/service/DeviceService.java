@@ -44,4 +44,8 @@ public class DeviceService {
     public void saveDevice(Device device) {
         deviceRepository.save(device);
     }
+
+    public void deleteDevice(Long id) {
+        deviceRepository.deleteById(id);
+    }
 }
