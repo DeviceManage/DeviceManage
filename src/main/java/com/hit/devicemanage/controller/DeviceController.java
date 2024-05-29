@@ -24,7 +24,7 @@ import java.util.List;
 public class DeviceController {
     @Autowired
     DeviceService deviceService;
-    @GetMapping("/")
+    @GetMapping("/devices")
     public String index(Model model) {
         List<Device> devices = deviceService.getAllDevices();
         model.addAttribute("devices", devices);

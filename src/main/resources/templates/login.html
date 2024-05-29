@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Hugo 0.88.1">
+    <title>Signin Template · Bootstrap v5.1</title>
+
+<!--    <link rel="canonical" href="https://getbootstrap.com/docs/5.1/examples/sign-in/">-->
+
+
+
+    <!-- Bootstrap core CSS -->
+      <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.2.3/css/bootstrap.min.css" rel="stylesheet"  crossorigin="anonymous">
+
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-siteuser-select: none;
+        -moz-siteuser-select: none;
+        siteuser-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+    </style>
+
+
+    <!-- Custom styles for this template -->
+    <style>
+      html,
+body {
+  height: 100%;
+}
+body {
+  display: flex;
+  align-items: center;
+  padding-top: 40px;
+  padding-bottom: 40px;
+  background-color: #f5f5f5;
+}
+
+.form-signin {
+  width: 100%;
+  max-width: 330px;
+  padding: 15px;
+  margin: auto;
+}
+
+.form-signin .checkbox {
+  font-weight: 400;
+}
+
+.form-signin  {
+  z-index: 2;
+}
+
+.form-signin input[type="password"] {
+  margin-bottom: 10px;
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
+}
+
+.form-signin input[type="text"] {
+  margin-bottom: -1px;
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
+}
+</style>
+  </head>
+  <body class="text-center">
+
+<main class="form-signin">
+  <form method="post" action="/login/check" onsubmit="return Checkform();">
+<!-- {#    <img class="mb-4" src="../assets/brand/bootstrap-logo.svg" alt="" width="72" height="57">#} -->
+      <svg xmlns="http://www.w3.org/2000/svg" style="color: purple;" width="120" height="120" fill="currentColor" class="bi bi-cart-check-fill" viewBox="0 0 16 16">
+  <path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1H.5zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm-1.646-7.646-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L8 8.293l2.646-2.647a.5.5 0 0 1 .708.708z"/>
+</svg>
+    <h1 class="h3 mb-3 fw-normal">登录界面</h1>
+
+    <div class="form-floating">
+      <input type="text" class="form-control" id="floatingInput" placeholder="用户名" required="required" name="user">
+      <label for="floatingInput">用户名</label>
+    </div>
+    <div class="form-floating">
+      <input type="password" class="form-control" id="floatingPassword" placeholder="密码" required="required" name="pwd">
+      <label for="floatingPassword">密码</label>
+    </div>
+
+    <div class="alert alert-primary" role="alert" id="message">
+      注意：用户名和密码应该仅由数字和字母组成！
+    </div>
+      <!--/*@thymesVar id="iserr" type="String"*/-->
+      <div th:if="${iserr=='1'}">
+          <div class="alert alert-danger" role="alert">
+              登陆失败: 用户名或密码错误
+          </div>
+      </div>
+
+    <div class="checkbox mb-3">
+      <label>
+        <input type="checkbox" value="remember-me" name="remember"> 保持登录状态
+      </label>
+    </div>
+    <button class="w-100 btn btn-lg btn-primary" type="submit">登录</button>
+    <p class="mt-5 mb-3 text-muted">&copy; 1911–2022</p>
+  </form>
+</main>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.2.3/js/bootstrap.bundle.min.js"  crossorigin="anonymous"></script>
+<script>
+  function Checkform(){
+    var name=document.getElementById("floatingInput").value;
+    var pwd=document.getElementById("floatingPassword").value;
+    var regname=/^\w+$/;
+    if(regname.test(name)==false||regname.test(pwd)==false){
+      document.getElementById("message").innerHTML="用户名或密码包含非法字符!";
+      return false;
+    }
+    var hash = CryptoJS.SHA256(pwd)
+    document.getElementById("floatingPassword").value = hash;
+    return true;
+  }
+
+</script>
+    
+  </body>
+</html>

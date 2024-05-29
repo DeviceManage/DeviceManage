@@ -32,6 +32,8 @@ public class DeviceService {
             device.setDimage(updatedevice.getDimage());
             device.setBuydate(updatedevice.getBuydate()); // ensure date is updated
             device.setDetail(updatedevice.getDetail());  // include detail update
+            device.setDgroup(updatedevice.getDgroup());
+            device.setDprivi(updatedevice.getDprivi());
 
             return deviceRepository.save(device);
         }).orElseGet(() -> {

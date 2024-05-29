@@ -45,7 +45,28 @@ Spring Boot + Thymeleaf + PostgreSQL
 | dtype   | 设备属性，int值，0代表计算机，1代表家具类，2代表其他仪器 |
 | dimage  | 设备图片的路径，限长255字节                 |
 | buydate | 设备购入日期                          |
-| detail  | 设备说明（型号规格等）
+| detail  | 设备说明（型号规格等）                     |
+| dgroup  | 设备所属组  -1表示公共设备                 |
+| dprivi  | 设备权限，暂定0=所有人可访问，3=本组人可访问        |
+
++ 5.29 edit: 加入dgroup 和 dprivi 字段
+
+#### 用户 siteuser
+
+| 属性      | 说明                       |
+|---------|--------------------------|
+| uid     | 用户id，int值，从0增长，作为用户的统一标识 |
+| uname   | 用户名，限长255字节              |
+| upasswd | 用户密码的散列值(SHA-256)        |
+| ugroup | 用户所属组
+| uprivi | 用户权限，暂定取值为0,3,5          |
+
+#### 组 devicegroup
+| 属性      | 说明                       |
+|---------|--------------------------|
+|gid| 组id |
+|gcode|组邀请码|
+
 
 ### Service
 
@@ -65,7 +86,14 @@ Spring Boot + Thymeleaf + PostgreSQL
 
 #### IndexController `/`
 
-根路由，目前直接重定向到`/devices/`，后续需要加入身份验证等功能
+根路由，~~目前直接重定向到`/devices/`，后续需要加入身份验证等功能~~
+
+5.29 edit: 已实现注册登录功能
+
++ `/sign` 注册前端
++ `/sign/check` 注册接口
++ `/login` 登录前端
++ `/login/check` 登录接口
 
 #### ImageController `/getimage/{hash}`
 
@@ -76,3 +104,5 @@ Spring Boot + Thymeleaf + PostgreSQL
 + `/` 返回设备列表
 + `/{id}` 查询单个设备
 + `/edit/{id}` 用GET请求是展示表单，用POST请求是进行修改的api
+
+#### edit Info

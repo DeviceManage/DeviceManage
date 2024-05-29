@@ -17,14 +17,18 @@ public class Device {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date buydate;
     private String detail;
+    private Integer dgroup;
+    private Integer dprivi;
 
-    public Device(Long did, String dname, Integer dtype, String dimage, Date buydate, String detail) {
+    public Device(Long did, String dname, Integer dtype, String dimage, Date buydate, String detail, Integer dgroup, Integer dprivi) {
         this.did = did;
         this.dname = dname;
         this.dtype = dtype;
         this.dimage = dimage;
         this.buydate = buydate;
         this.detail = detail;
+        this.dgroup = dgroup;
+        this.dprivi = dprivi;
     }
 
     public Device() {
@@ -78,6 +82,14 @@ public class Device {
     public void setDetail(String detail) {
         this.detail = detail;
     }
+
+    public Integer getDgroup() { return dgroup; }
+
+    public void setDgroup(Integer dgroup) { this.dgroup = dgroup; }
+
+    public Integer getDprivi() { return dprivi; }
+
+    public void setDprivi(Integer dprivi) { this.dprivi = dprivi; }
 
     public String getFormattedBuydate() {
         if (this.buydate != null) {
