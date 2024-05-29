@@ -17,7 +17,7 @@
 + 用户注册登录（暂不考虑单位）[Done]
 + 查询设备列表 [Done]
 + 显示设备各个属性 [Done]
-+ 设备信息修改 [Done]
++ 设备信息修改、删除 [Done]
 + 设备信息上传 [Done]
 
 ### 第二轮迭代目标
@@ -91,8 +91,8 @@ Spring Boot + Thymeleaf + PostgreSQL
 
 5.29 edit: 已实现注册登录功能
 
-+ `/sign` 注册前端
-+ `/sign/check` 注册接口
++ `/register` 注册前端
++ `/register/check` 注册接口
 + `/login` 登录前端
 + `/login/check` 登录接口
 + `/reset_sessions` 清理注册登录session
@@ -103,11 +103,11 @@ Spring Boot + Thymeleaf + PostgreSQL
 
 #### DeviceController `/devices`
 
-+ `/` 返回设备列表
 + `/{id}` 查询单个设备
 + `/edit/{id}` 用GET请求是展示表单，用POST请求是进行修改的api
 + `/upload` 上传前端页面
 + `/upload/check` 上传接口
++ `/delete/{id}` 删除接口
 
 #### MainController `/main`
 
