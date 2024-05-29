@@ -15,7 +15,7 @@ public class SiteuserService {
         this.siteuserRepository = siteuserRepository;
     }
 
-    public List<Siteuser> findAll() { return siteuserRepository.findAll(); }
+    public List<Siteuser> getAllUser() { return siteuserRepository.findAll(); }
 
     public Siteuser findByUname(String uname) { return siteuserRepository.findByUname(uname); }
 

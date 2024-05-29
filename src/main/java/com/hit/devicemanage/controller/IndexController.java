@@ -27,22 +27,23 @@ public class IndexController {
         else{
             model.addAttribute("isuser", "true");
         }
-        return "index.html";
+        return "index";
     }
+
 
     @GetMapping("/signin")
     public String signin(Model model, HttpSession session, HttpServletRequest request) {
         String isdone = request.getParameter("iserr");
         if (isdone == null) {
             model.addAttribute("iserr", "0");
-            return "signin.html";
+            return "signin";
         }
         if (isdone.equals("1")) {
             model.addAttribute("iserr", "1");
-            return "signin.html";
+            return "signin";
         }
         model.addAttribute("iserr", "0");
-        return "signin.html";
+        return "signin";
     }
 
     @PostMapping("/signin/check")
@@ -69,14 +70,14 @@ public class IndexController {
         String iserr = request.getParameter("iserr");
         if (iserr == null) {
             model.addAttribute("iserr", "0");
-            return "login.html";
+            return "login";
         }
         if (iserr.equals("1")) {
             model.addAttribute("iserr", "1");
-            return "login.html";
+            return "login";
         }
         model.addAttribute("iserr", "0");
-        return "login.html";
+        return "login";
     }
 
     @PostMapping("/login/check")
@@ -100,6 +101,18 @@ public class IndexController {
         session.removeAttribute("username");
         return "redirect:/";
     }
+
+
+
+    @GetMapping("/index")
+    public String index2(Model model, HttpSession session, HttpServletRequest request) {
+        return "redirect:/";
+    }
+    @PostMapping("/index")
+    public String index3(Model model, HttpSession session, HttpServletRequest request) {
+        return "redirect:/";
+    }
+
 }
 
 /*

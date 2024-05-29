@@ -14,11 +14,11 @@
 ### 第一轮迭代目标
 
 建立基本框架
-+ 用户注册登录（暂不考虑单位）
++ 用户注册登录（暂不考虑单位）[Done]
 + 查询设备列表 [Done]
 + 显示设备各个属性 [Done]
 + 设备信息修改 [Done]
-+ 设备信息统计
++ 设备信息上传 [Done]
 
 ### 第二轮迭代目标
 
@@ -27,6 +27,7 @@
 + 设备的添加与修改
 + 设备报废管理
 + 设备借出管理
++ 设备信息统计
 + 前端优化
 
 
@@ -94,6 +95,7 @@ Spring Boot + Thymeleaf + PostgreSQL
 + `/sign/check` 注册接口
 + `/login` 登录前端
 + `/login/check` 登录接口
++ `/reset_sessions` 清理注册登录session
 
 #### ImageController `/getimage/{hash}`
 
@@ -104,5 +106,10 @@ Spring Boot + Thymeleaf + PostgreSQL
 + `/` 返回设备列表
 + `/{id}` 查询单个设备
 + `/edit/{id}` 用GET请求是展示表单，用POST请求是进行修改的api
++ `/upload` 上传前端页面
++ `/upload/check` 上传接口
 
-#### edit Info
+#### MainController `/main`
+
++ `/` 查询所有设备，暂时没加入权限管理
+

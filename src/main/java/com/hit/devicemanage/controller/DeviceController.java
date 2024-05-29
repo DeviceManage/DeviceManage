@@ -1,17 +1,23 @@
 package com.hit.devicemanage.controller;
 
 import com.hit.devicemanage.entity.Device;
+import com.hit.devicemanage.entity.Siteuser;
 import com.hit.devicemanage.service.DeviceService;
 
+import com.hit.devicemanage.service.SiteuserService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
+import java.net.http.HttpRequest;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -24,6 +30,9 @@ import java.util.List;
 public class DeviceController {
     @Autowired
     DeviceService deviceService;
+    @Autowired
+    private SiteuserService siteuserService;
+
     @GetMapping("/devices")
     public String index(Model model) {
         List<Device> devices = deviceService.getAllDevices();
@@ -65,6 +74,64 @@ public class DeviceController {
 
 
         return "redirect:/devices/";  // 重定向到设备列表页面
+    }
+
+    @PostMapping("/upload/check")
+    public String checkImage(@RequestParam("image") MultipartFile imageFile, HttpSession session, HttpServletRequest request) throws Exception {
+        if(session.getAttribute("username") == null) {
+            return "redirect:/";
+        }
+
+        String username = session.getAttribute("username").toString();
+        Siteuser siteuser = siteuserService.findByUname(username);
+        if(siteuser == null) {
+            return "redirect:/";
+        }
+
+        Integer dgroup = siteuser.getUgroup();
+        Integer dprivi = siteuser.getUprivi();
+        String dname = request.getParameter("dname");
+        Integer dtype = Integer.valueOf(request.getParameter("dtype"));
+
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        Date buydate = formatter.parse(request.getParameter("buydate"));
+
+        String detail = request.getParameter("detail");
+
+        System.out.println(buydate);
+        System.out.println(detail);
+        System.out.println(dgroup);
+        System.out.println(dprivi);
+        System.out.println(dname);
+        System.out.println(dtype);
+
+        Device newdevice = new Device();
+        newdevice.setDname(dname);
+        newdevice.setDtype(dtype);
+        newdevice.setBuydate(buydate);
+        newdevice.setDetail(detail);
+        newdevice.setDgroup(dgroup);
+        newdevice.setDprivi(dprivi);
+
+        if (!imageFile.isEmpty()) {
+            // 生成文件名
+            String hash = hashTimestampAndFileName(Instant.now().toString() + imageFile.getOriginalFilename());
+            String fileName = hash + ".jpg";
+            Path filePath = Paths.get("src/main/resources/static/images/" + fileName);
+
+            // 保存文件到指定目录
+            Files.write(filePath, imageFile.getBytes());
+
+            // 更新设备的dimage字段
+            newdevice.setDimage(hash);
+        }
+        deviceService.saveDevice(newdevice);
+        return "redirect:/";
+    }
+
+    @GetMapping("/upload")
+    public String uploadDevice(Model model) {
+        return "upload";
     }
 
     private String hashTimestampAndFileName(String input) throws NoSuchAlgorithmException {

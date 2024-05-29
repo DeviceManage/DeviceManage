@@ -41,4 +41,7 @@ public class DeviceService {
             return deviceRepository.save(updatedevice);
         });
     }
+    public void saveDevice(Device device) {
+        deviceRepository.save(device);
+    }
 }
