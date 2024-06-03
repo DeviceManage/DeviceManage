@@ -75,8 +75,6 @@ Spring Boot + Thymeleaf + PostgreSQL
 
 这是Spring Data JPA中的仓库接口，用来跟数据库建立连接和进行查询。数据库连接选项配置在`application.properties`，连接的是放在公网服务器上的postgresql
 
-（**Warning**:在将项目最终开放为public前务必脱敏，把连接配置删掉。）
-
 #### DeviceService
 
 这里是数据操作的核心逻辑。
