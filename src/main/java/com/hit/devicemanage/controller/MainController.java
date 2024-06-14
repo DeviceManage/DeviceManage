@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -53,8 +54,24 @@ public class MainController {
 
             model.addAttribute("username", username);
         }
+        Siteuser siteuser = siteuserService.findByUname(username);
+        int uprivi = siteuser.getUprivi();
+        int ugroup = siteuser.getUgroup();
         List<Device> devices = deviceService.getAllDevices();
-        model.addAttribute("devices", devices);
+        List<Device> limit_devices = new ArrayList<Device>();
+
+        for(Device device : devices) {
+            if (device.getDprivi() < uprivi){ // 对于权限低的设备
+                limit_devices.add(device);
+            }
+            if (device.getDprivi() == uprivi){ // 对于同等权限的设备
+                if (device.getDgroup() == ugroup){
+                    limit_devices.add(device);
+                }
+            }
+        }
+
+        model.addAttribute("devices", limit_devices);
         return "main.html";
     }
 
