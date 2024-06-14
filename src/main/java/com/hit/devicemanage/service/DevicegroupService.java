@@ -24,5 +24,7 @@ public class DevicegroupService {
         return devicegroupRepository.findById(id);
     }
 
-
+    public Devicegroup findDevicegroupByGcode(String gcode) {
+        return devicegroupRepository.findByGcode(gcode);
+    }
 }

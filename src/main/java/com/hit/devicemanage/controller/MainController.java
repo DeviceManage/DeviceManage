@@ -3,7 +3,6 @@ package com.hit.devicemanage.controller;
 import com.hit.devicemanage.entity.Device;
 import com.hit.devicemanage.entity.Devicegroup;
 import com.hit.devicemanage.service.DeviceService;
-import com.hit.devicemanage.service.SiteuserRepository;
 import com.hit.devicemanage.service.SiteuserService;
 import com.hit.devicemanage.service.DevicegroupService;
 import com.hit.devicemanage.entity.Siteuser;
@@ -42,7 +41,7 @@ public class MainController {
             model.addAttribute("ugroup",ugroup);
             if (ugroup != -1) {
                 Optional<Devicegroup> dgroup = devicegroupService.getDevicegroupById((long) ugroup);
-                System.out.println(dgroup);
+//                System.out.println(dgroup);
                 if(dgroup.isPresent()) {
 
                     model.addAttribute("devicegroup",dgroup.get());
@@ -58,4 +57,64 @@ public class MainController {
         model.addAttribute("devices", devices);
         return "main.html";
     }
+
+    @GetMapping("/main/join")
+    public String joinGroupStatic(Model model, HttpSession session, HttpServletRequest request) {
+        String username = (String) session.getAttribute("username");
+        if (username == null) {
+            return "redirect:/";
+        }
+
+        String iserr = request.getParameter("iserr");
+        if (iserr == null) {
+            model.addAttribute("iserr", "0");
+            return "joingroup.html";
+        }
+        model.addAttribute("iserr", "1");
+        return "joingroup.html";
+    }
+
+    @PostMapping("/main/join")
+    public String joinGroup(Model model, HttpSession session, HttpServletRequest request) {
+        String username = (String) session.getAttribute("username");
+        if (username == null) {
+            return "redirect:/";
+        }
+
+        String dgcode = request.getParameter("dgcode");
+        if (dgcode == null) {
+            return "redirect:/";
+        }
+        Devicegroup dgroup = devicegroupService.findDevicegroupByGcode(dgcode);
+        if (dgroup == null) {
+            return "redirect:/main/join?iserr=1";
+        }
+        Siteuser siteuser = siteuserService.findByUname(username);
+        if (siteuser == null) {
+            return "redirect:/";
+        }
+        int ugroup = Math.toIntExact(dgroup.getGid());
+        int uprivi = 3;
+        siteuser.setUgroup(ugroup);
+        siteuser.setUprivi(uprivi);
+        siteuserService.saveSiteuser(siteuser);
+        return "redirect:/main";
+    }
+
+    @GetMapping("/main/reset_group")
+    public String resetGroup(Model model, HttpSession session, HttpServletRequest request) {
+        String username = (String) session.getAttribute("username");
+        if (username == null) {
+            return "redirect:/";
+        }
+        Siteuser siteuser = siteuserService.findByUname(username);
+        if (siteuser == null) {
+            return "redirect:/";
+        }
+        siteuser.setUgroup(-1);
+        siteuser.setUprivi(0);
+        siteuserService.saveSiteuser(siteuser);
+        return "redirect:/main";
+    }
+
 }

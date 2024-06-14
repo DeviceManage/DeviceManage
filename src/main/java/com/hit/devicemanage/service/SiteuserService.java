@@ -1,5 +1,6 @@
 package com.hit.devicemanage.service;
 
+import com.hit.devicemanage.entity.Device;
 import com.hit.devicemanage.entity.Siteuser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,6 +31,10 @@ public class SiteuserService {
             updateuser.setUid(id);
             return siteuserRepository.save(updateuser);
         });
+    }
+
+    public void saveSiteuser(Siteuser siteuser) {
+        siteuserRepository.save(siteuser);
     }
 
     public void newUser(String uname, String upasswd, Integer ugroup, Integer uprivi) {
