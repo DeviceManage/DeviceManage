@@ -19,8 +19,9 @@ public class Device {
     private String detail;
     private Integer dgroup;
     private Integer dprivi;
+    private Integer dstate;
 
-    public Device(Long did, String dname, Integer dtype, String dimage, Date buydate, String detail, Integer dgroup, Integer dprivi) {
+    public Device(Long did, String dname, Integer dtype, String dimage, Date buydate, String detail, Integer dgroup, Integer dprivi, Integer dstate) {
         this.did = did;
         this.dname = dname;
         this.dtype = dtype;
@@ -29,6 +30,7 @@ public class Device {
         this.detail = detail;
         this.dgroup = dgroup;
         this.dprivi = dprivi;
+        this.dstate = dstate;
     }
 
     public Device() {
@@ -90,6 +92,11 @@ public class Device {
     public Integer getDprivi() { return dprivi; }
 
     public void setDprivi(Integer dprivi) { this.dprivi = dprivi; }
+
+    public Integer getDstate() { return dstate; }
+
+    public void setDstate(Integer dstate) { this.dstate = dstate; }
+
 
     public String getFormattedBuydate() {
         if (this.buydate != null) {

@@ -66,6 +66,7 @@ Spring Boot + Thymeleaf + PostgreSQL
 | 属性      | 说明                       |
 |---------|--------------------------|
 |gid| 组id |
+|gname|组名| 
 |gcode|组邀请码|
 
 

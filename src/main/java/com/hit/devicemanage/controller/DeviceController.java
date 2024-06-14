@@ -92,6 +92,7 @@ public class DeviceController {
         Integer dprivi = siteuser.getUprivi();
         String dname = request.getParameter("dname");
         Integer dtype = Integer.valueOf(request.getParameter("dtype"));
+        Integer dstate = 0;
 
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         Date buydate = formatter.parse(request.getParameter("buydate"));
@@ -112,6 +113,7 @@ public class DeviceController {
         newdevice.setDetail(detail);
         newdevice.setDgroup(dgroup);
         newdevice.setDprivi(dprivi);
+        newdevice.setDstate(dstate);
 
         if (!imageFile.isEmpty()) {
             // 生成文件名
