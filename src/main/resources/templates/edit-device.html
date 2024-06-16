@@ -4,7 +4,7 @@
   <title>编辑设备 - HIT小型购物网站</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.2.3/css/bootstrap.min.css" rel="stylesheet"  crossorigin="anonymous">
+  <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.2.3/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 </head>
 <body>
 
@@ -30,10 +30,10 @@
   <form th:action="@{'/devices/edit/' + ${device.did}}" th:object="${device}" method="post" enctype="multipart/form-data" class="row g-3">
     <div class="col-md-6">
       <label for="dname" class="form-label">名称:</label>
-      <input type="text" id="dname" th:field="*{dname}" class="form-control" />
+      <input type="text" id="dname" th:field="*{dname}" class="form-control" required/>
     </div>
     <div class="col-md-6">
-      <label for="dtype" class="form-label">型号:</label>
+      <label for="dtype" class="form-label">类型:</label>
       <select id="dtype" th:field="*{dtype}" class="form-select">
         <option th:value="0" th:text="'设备'" th:selected="${device.dtype == 0}"></option>
         <option th:value="1" th:text="'家具'" th:selected="${device.dtype == 1}"></option>
@@ -43,26 +43,42 @@
     <div class="col-md-6">
       <label for="dimage" class="form-label">图片:</label>
       <!-- 现有图片预览 -->
-      <img th:src="@{'/getimage/' + ${device.dimage}}" th:alt="${device.dname}" class="img-thumbnail mb-2" style="max-width: 100px;" />
+      <img id="previewImage" th:src="@{'/getimage/' + ${device.dimage}}" th:alt="${device.dname}" class="img-thumbnail mb-2" style="max-width: 100px;" />
       <!-- 文件上传输入 -->
       <input type="file" id="dimage" name="image" accept="image/*" class="form-control" />
     </div>
     <div class="col-md-6">
       <label for="buydate" class="form-label">购入日期:</label>
-      <input type="date" id="buydate" th:field="*{buydate}" class="form-control" />
+      <input type="date" id="buydate" th:field="*{buydate}" class="form-control" required/>
     </div>
 
     <div class="col-12">
       <label for="detail" class="form-label">详情:</label>
-      <textarea id="detail" th:field="*{detail}" class="form-control"></textarea>
+      <textarea id="detail" th:field="*{detail}" class="form-control" required></textarea>
     </div>
 
     <div class="col-12">
       <label for="dprivi" class="form-label">归属:</label>
       <select id="dprivi" class="form-select" name="dprivi">
-        <option value="0" >公开</option>
+        <option value="0">公开</option>
         <option value="1" th:if="${in_group == 1 && uprivi!=7}">仅本实验室</option>
         <option th:each="group : ${groups}" th:value="${group.getGid()}" th:text="${group.getGname()}" th:if="${uprivi == 7}"></option>
+      </select>
+    </div>
+
+    <div class="col-md-6">
+      <label for="dstate" class="form-label">设备状态:</label>
+      <select id="dstate" class="form-select" name="dstate" onchange="toggleBorrowedGroup()">
+        <option value="0" th:selected="${device.dstate == 0}">正常</option>
+        <option value="1" th:selected="${device.dstate == 1}">报废</option>
+        <option value="2" th:selected="${device.dstate == 2}">借出</option>
+      </select>
+    </div>
+
+    <div class="col-md-6" id="borrowedGroupDiv" style="display: none;">
+      <label for="borrowedGroup" class="form-label">借出到:</label>
+      <select id="borrowedGroup" name="borrowedGroup" class="form-select">
+        <option th:each="group : ${groups}" th:value="${group.gid}" th:text="${group.gname}"></option>
       </select>
     </div>
 
@@ -89,6 +105,7 @@
 <script>
   document.addEventListener("DOMContentLoaded", function() {
     document.getElementById("dimage").addEventListener("change", previewImage);
+    toggleBorrowedGroup(); // 确保页面加载时状态正确
   });
 
   function previewImage(event) {
@@ -101,6 +118,16 @@
       reader.readAsDataURL(event.target.files[0]);
     } else {
       document.getElementById('previewImage').src = '';
+    }
+  }
+
+  function toggleBorrowedGroup() {
+    var dstate = document.getElementById("dstate").value;
+    var borrowedGroupDiv = document.getElementById("borrowedGroupDiv");
+    if (dstate == 2) {
+      borrowedGroupDiv.style.display = "block";
+    } else {
+      borrowedGroupDiv.style.display = "none";
     }
   }
 </script>

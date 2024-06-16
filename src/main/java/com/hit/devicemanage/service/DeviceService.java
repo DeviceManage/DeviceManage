@@ -23,6 +23,9 @@ public class DeviceService {
     public List<Device> getDeviceByGroup(Integer group) {
         return deviceRepository.findByDgroup(group);
     }
+    public List<Device> getBorrowedDevicesByGroup(int groupId) {
+        return deviceRepository.findByTmpgid(groupId);
+    }
 
     public Optional<Device> getDeviceById(Integer id) {
         return deviceRepository.findById(id);

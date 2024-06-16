@@ -20,8 +20,17 @@ public class Device {
     private Integer dgroup;
     private Integer dprivi;
     private Integer dstate;
+    private Integer tmpgid;
 
-    public Device(Integer did, String dname, Integer dtype, String dimage, Date buydate, String detail, Integer dgroup, Integer dprivi, Integer dstate) {
+    public Integer getTmpgid() {
+        return tmpgid;
+    }
+
+    public void setTmpgid(Integer tmpgid) {
+        this.tmpgid = tmpgid;
+    }
+
+    public Device(Integer did, String dname, Integer dtype, String dimage, Date buydate, String detail, Integer dgroup, Integer dprivi, Integer dstate, Integer tmpgid) {
         this.did = did;
         this.dname = dname;
         this.dtype = dtype;
@@ -31,10 +40,10 @@ public class Device {
         this.dgroup = dgroup;
         this.dprivi = dprivi;
         this.dstate = dstate;
+        this.tmpgid = tmpgid;
     }
 
     public Device() {
-
     }
 
     public Integer getDid() {
@@ -116,5 +125,22 @@ public class Device {
             return "其他";
         }
         return "未知";
+    }
+    public String queryStatus()
+    {
+        if (dstate == 0) {
+            return "正常";
+        } else if (dstate == 1) {
+            return "已报废";
+        } else if (dstate == 2) {
+            return "已借出";
+        }
+        return "未知";
+    }
+    public String getStateClass()
+    {
+        if (dstate == 1) return " status-scrapped";
+        else if (dstate == 2) return " status-borrowed";
+        else return " status-normal";
     }
 }

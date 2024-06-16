@@ -52,7 +52,7 @@ public class DeviceController {
         }
         Device device = deviceService.getDeviceById(id).orElse(null);
         Siteuser user = siteuserService.findByUname(username);
-        if (user.getUgroup() != device.getDgroup() && device.getDgroup() != -1 && user.getUprivi() != 7) {
+        if (user.getUgroup() != device.getDgroup() && user.getUgroup() != device.getTmpgid() && device.getDgroup() != -1 && user.getUprivi() != 7) {
             model.addAttribute("err","无权访问");
             model.addAttribute("ret","/main");
             return "error";
@@ -61,6 +61,8 @@ public class DeviceController {
         if (device.getDgroup() != -1)
         model.addAttribute("group", devicegroupService.getDevicegroupById(device.getDgroup()).get().getGname());
         else model.addAttribute("group","");
+        if (device.getDstate() != 2) model.addAttribute("tmpgroup", "");
+        else model.addAttribute("tmpgroup",devicegroupService.getDevicegroupById(device.getTmpgid()).get().getGname());
         return "device-detail";  // 返回Thymeleaf模板
     }
 
@@ -117,10 +119,8 @@ public class DeviceController {
             String fileName = hash + ".jpg";
             Path filePath = Paths.get("src/main/resources/static/images/" + fileName);
 
-            // 保存文件到指定目录
             Files.write(filePath, imageFile.getBytes());
 
-            // 更新设备的dimage字段
             updatedDevice.setDimage(hash);
         }
         String dprivi = request.getParameter("dprivi");
@@ -143,6 +143,10 @@ public class DeviceController {
         }
         if(updatedDevice.getDstate()==null){
             deviceService.getDeviceById(id).ifPresent(_device -> updatedDevice.setDstate(_device.getDstate()));
+        }
+        if (updatedDevice.getDgroup() == -1) {
+            updatedDevice.setTmpgid(0);
+            if (updatedDevice.getDstate() == 2) updatedDevice.setDstate(0);
         }
         deviceService.updateDevice(id, updatedDevice);
 
@@ -198,6 +202,7 @@ public class DeviceController {
         newdevice.setDgroup(dgroup);
         newdevice.setDprivi(dprivi);
         newdevice.setDstate(dstate);
+        newdevice.setTmpgid(0);
 
         if (!imageFile.isEmpty()) {
             // 生成文件名

@@ -10,4 +10,5 @@ import java.util.List;
 public interface DeviceRepository extends JpaRepository<Device, Integer> {
     @Query("SELECT e from Device e where e.dgroup = :dgroup or e.dprivi = 0")
     List<Device> findByDgroup(@Param("dgroup") Integer dgroup);
+    List<Device> findByTmpgid(int groupId);
 }

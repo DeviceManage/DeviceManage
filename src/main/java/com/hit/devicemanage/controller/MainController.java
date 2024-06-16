@@ -58,6 +58,8 @@ public class MainController {
         int uprivi = siteuser.getUprivi();
         int ugroup = siteuser.getUgroup();
         List<Device> devices = deviceService.getAllDevices();
+        List<Device> borrowedDevices = deviceService.getBorrowedDevicesByGroup(ugroup);
+        model.addAttribute("borrowedDevices", borrowedDevices);
         if (uprivi == 7) model.addAttribute("devices", devices);
         else model.addAttribute("devices", deviceService.getDeviceByGroup(ugroup));
         model.addAttribute("uprivi", uprivi);

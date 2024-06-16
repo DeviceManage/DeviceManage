@@ -33,6 +33,8 @@
             <p><strong>购入日期:</strong> <span th:text="${device.formattedBuydate}"></span></p>
             <p><strong>详细信息:</strong> <span th:text="${device.detail}"></span></p>
             <p><strong>归属:</strong> <span th:text="${device.dprivi == 0} ? '公开' : ${group}"></span></p>
+            <p><strong>状态:</strong> <span th:text="${device.queryStatus()}"></span></p>
+            <p th:if="${device.dstate==2}"><strong>借入方:</strong> <span th:text="${tmpgroup}"></span></p>
             <div class="text-center">
                 <img th:src="@{'/getimage/' + ${device.dimage}}" alt="设备图片" class="img-fluid" style="max-width: 300px;">
             </div>
