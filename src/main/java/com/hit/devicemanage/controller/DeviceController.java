@@ -48,15 +48,27 @@ public class DeviceController {
     }
 
     @GetMapping("/edit/{id}")
-    public String showEditForm(@PathVariable("id") Long id, Model model) {
+    public String showEditForm(@PathVariable("id") Long id, Model model, HttpSession session) {
         Device device = deviceService.getDeviceById(id).orElseThrow(() -> new IllegalArgumentException("Invalid device Id: " + id));
         model.addAttribute("device", device);
+        String username = session.getAttribute("username").toString();
+        if (username == null){
+            return "redirect:/login";
+        }
+        Siteuser siteuser = siteuserService.findByUname(username);
+        int uprivi = siteuser.getUprivi();
+        if(uprivi == 0) {
+            model.addAttribute("in_group", "0");
+        }
+        else{
+            model.addAttribute("in_group", "1");
+        }
         return "edit-device";  // 返回Thymeleaf模板 'edit-device.html'
     }
 
     @PostMapping("/edit/{id}")
     public String updateDevice(@PathVariable("id") Long id, @ModelAttribute("device") Device updatedDevice,
-                               @RequestParam("image") MultipartFile imageFile) throws Exception{
+                               @RequestParam("image") MultipartFile imageFile,HttpSession session, HttpServletRequest request) throws Exception{
 
             if (!imageFile.isEmpty()) {
                 // 生成文件名
@@ -70,10 +82,32 @@ public class DeviceController {
                 // 更新设备的dimage字段
                 updatedDevice.setDimage(hash);
             }
+            String dprivi = request.getParameter("dprivi");
+            if (dprivi.equals("0")) {
+                updatedDevice.setDprivi(0);
+                updatedDevice.setDgroup(-1);
+            }
+            else{
+                String username = session.getAttribute("username").toString();
+                if(username == null){
+                    return "redirect:/login";
+                }
+                Siteuser siteuser = siteuserService.findByUname(username);
+                int uprivi = siteuser.getUprivi();
+                int ugroup = siteuser.getUgroup();
+                updatedDevice.setDprivi(uprivi);
+                updatedDevice.setDgroup(ugroup);
+            }
+            if(updatedDevice.getDimage()==null){
+                deviceService.getDeviceById(id).ifPresent(device -> updatedDevice.setDimage(device.getDimage()));
+            }
+            if(updatedDevice.getDstate()==null){
+                deviceService.getDeviceById(id).ifPresent(device -> updatedDevice.setDstate(device.getDstate()));
+            }
             deviceService.updateDevice(id, updatedDevice);
 
 
-        return "redirect:/devices/";  // 重定向到设备列表页面
+        return "redirect:/main";  // 重定向到设备列表页面
     }
 
     @PostMapping("/upload/check")
@@ -88,22 +122,34 @@ public class DeviceController {
             return "redirect:/";
         }
 
-        Integer dgroup = siteuser.getUgroup();
-        Integer dprivi = siteuser.getUprivi();
+        int dgroup;
+        int dprivi;
         String dname = request.getParameter("dname");
-        Integer dtype = Integer.valueOf(request.getParameter("dtype"));
+        int dtype = Integer.valueOf(request.getParameter("dtype"));
+        int dstate = 0;
+        String requested_privi = request.getParameter("dprivi");
+
+        if (requested_privi.equals("1")){ // 上传到本实验室
+            dgroup = siteuser.getUgroup();
+            dprivi = siteuser.getUprivi();
+        }
+        else{ // 上传为公开设备
+            dgroup = -1;
+            dprivi = 0;
+        }
 
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         Date buydate = formatter.parse(request.getParameter("buydate"));
 
         String detail = request.getParameter("detail");
 
-        System.out.println(buydate);
-        System.out.println(detail);
-        System.out.println(dgroup);
-        System.out.println(dprivi);
-        System.out.println(dname);
-        System.out.println(dtype);
+//        System.out.println(buydate);
+//        System.out.println(detail);
+//        System.out.println(dgroup);
+//        System.out.println(dprivi);
+//        System.out.println(dname);
+//        System.out.println(dtype);
+//        System.out.println(dprivi);
 
         Device newdevice = new Device();
         newdevice.setDname(dname);
@@ -112,6 +158,7 @@ public class DeviceController {
         newdevice.setDetail(detail);
         newdevice.setDgroup(dgroup);
         newdevice.setDprivi(dprivi);
+        newdevice.setDstate(dstate);
 
         if (!imageFile.isEmpty()) {
             // 生成文件名
@@ -126,11 +173,23 @@ public class DeviceController {
             newdevice.setDimage(hash);
         }
         deviceService.saveDevice(newdevice);
-        return "redirect:/";
+        return "redirect:/main";
     }
 
     @GetMapping("/upload")
-    public String uploadDevice(Model model) {
+    public String uploadDevice(Model model, HttpSession session) {
+        String username = session.getAttribute("username").toString();
+        Siteuser siteuser = siteuserService.findByUname(username);
+        if(siteuser == null) {
+            return "redirect:/";
+        }
+        int uprivi = siteuser.getUprivi();
+        if(uprivi == 0) {
+            model.addAttribute("in_group", "0");
+        }
+        else{
+            model.addAttribute("in_group", "1");
+        }
         return "upload";
     }
 

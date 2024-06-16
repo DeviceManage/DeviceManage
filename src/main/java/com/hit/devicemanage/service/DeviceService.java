@@ -34,6 +34,7 @@ public class DeviceService {
             device.setDetail(updatedevice.getDetail());  // include detail update
             device.setDgroup(updatedevice.getDgroup());
             device.setDprivi(updatedevice.getDprivi());
+            device.setDstate(updatedevice.getDstate());
 
             return deviceRepository.save(device);
         }).orElseGet(() -> {

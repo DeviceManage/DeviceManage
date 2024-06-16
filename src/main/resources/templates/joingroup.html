@@ -79,7 +79,7 @@
 
 <main>
     <div class="p-2 d-flex" >
-        <a href="/main" class="float-lg-left p-2"><button type="submit" class="btn btn-danger" >&nbsp;&nbsp;&nbsp;&nbsp;回到首页&nbsp;&nbsp;&nbsp;&nbsp;</button></a>
+        <a href="/main" class="float-lg-left"><button type="submit" class="btn btn-danger" >&nbsp;&nbsp;&nbsp;&nbsp;回到首页&nbsp;&nbsp;&nbsp;&nbsp;</button></a>
     </div>
 
     <div class="album py-5 bg-light">
@@ -91,40 +91,19 @@
                     <div class="card shadow-sm">
                         <div class="d-flex justify-content-center">
 
-                            <form enctype="multipart/form-data" method="post" action="/devices/upload/check" class="p-2">
-                                <h1 class="h3 mb-3 fw-normal mx-auto">上传新设备</h1>
+                            <form enctype="multipart/form-data" method="post" action="/main/join" class="p-2">
+                                <h1 class="h3 mb-3 fw-normal mx-auto p-2">加入一个新的实验室</h1>
                                 <div class="form-floating mb-3">
-                                    <input type="text" class="form-control" id="dname" placeholder="sanitater" name="dname">
-                                    <label for="dname">设备名字</label>
+                                    <input type="text" class="form-control" id="dgcode" placeholder="sanitater" name="dgcode">
+                                    <label for="dgcode">实验室邀请码</label>
                                 </div>
-                                <div class="form-floating mb-3">
-                                    <input type="text" class="form-control" id="dtype" placeholder="2" name="dtype">
-                                    <label for="dtype">设备类别</label>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="dimage">图片:</label>
-                                    <!-- 现有图片预览 -->
-                                    <img src="" alt="暂无图片预览" width="100" />
-                                    <!-- 文件上传输入 -->
-                                    <input type="file" id="dimage" name="image" accept="image/*" onchange="previewImage(event)" />
-                                </div>
-                                <div class="mb-3">
-                                    <label for="buydate">购入日期:</label>
-                                    <input type="date" id="buydate" name="buydate" />
-                                </div>
-                                <div class="mb-3">
-                                    <label for="detail">详情:</label>
-                                    <textarea id="detail" class="form-control" rows="3" name="detail"></textarea>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="dprivi" class="form-label">权限:</label>
-                                    <select id="dprivi" class="form-select" name="dprivi">
-                                        <option value="0" >公开</option>
-                                        <option value="1" th:if="${in_group=='1'}">仅本实验室</option>
-                                    </select>
+                                <div th:if="${iserr=='1'}">
+                                    <div class="alert alert-danger p-2" role="alert">
+                                        邀请码不存在！
+                                    </div>
                                 </div>
                                 <button type="submit" class="btn btn-primary mb-3 float-md-none" >
-                                    上传
+                                    确认
                                 </button>
                             </form>
                         </div>
@@ -170,3 +149,5 @@
 </script>
 </body>
 </html>
+
+

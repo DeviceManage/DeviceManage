@@ -68,7 +68,8 @@
           <strong>&nbsp;主页</strong>
         </a>
         <!--/*@thymesVar id="username" type="String"*/-->
-        <div class="alert alert-secondary" role="alert" style="margin-top: 20px;" th:text="${'Hello, '+username}">
+        <!--/*@thymesVar id="getGname" type="String"*/-->
+        <div class="alert alert-secondary" role="alert" style="margin-top: 20px;" th:text="${ugroup == -1 || devicegroup == null} ? 'Hello, ' + ${username}  + ' 当前未所属实验室' : 'Hello, '+ ${username} + ' 当前所属:' + ${devicegroup.getGname()}">
           HIT  科研设备管理网站
         </div>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
@@ -80,8 +81,10 @@
 
 <main>
     <div class="p-2 d-flex" >
-      <a href="/main" class="float-lg-left"><button type="submit" class="btn btn-danger" >&nbsp;&nbsp;&nbsp;&nbsp;回到首页&nbsp;&nbsp;&nbsp;&nbsp;</button></a>
-      <a href="/devices/upload"  class=" ml-auto"><button type="submit" class="btn btn-primary" >&nbsp;上传新设备&nbsp;</button></a>
+      <a href="/" class="float-lg-left p-2"><button type="submit" class="btn btn-danger" >&nbsp;&nbsp;&nbsp;&nbsp;回到首页&nbsp;&nbsp;&nbsp;&nbsp;</button></a>
+      <a href="/devices/upload"  class=" ml-auto p-2"><button type="submit" class="btn btn-primary" >&nbsp;上传新设备&nbsp;</button></a>
+      <a href="/main/join" methods="get" class=" ml-auto p-2" th:if="${ugroup==-1}"><button type="submit" class="btn btn-primary" >&nbsp;加入一个实验室&nbsp;</button></a>
+      <a href="/main/reset_group" methods="post" class=" ml-auto p-2" th:if="${ugroup!=-1}"><button type="submit" class="btn btn-primary" >&nbsp;退出所属实验室&nbsp;</button></a>
     </div>
 
   <div class="album py-5 bg-light">
@@ -120,7 +123,7 @@
     <p class="float-end mb-1">
       <a href="#">回到首页</a>
     </p>
-    <p class="mb-1">本网站作者为  &copy; Bootstrap, 但是由伟大的PowerAhuang偷来改造而成</p>
+    <p class="mb-1">&copy; Bootstrap edited by munan</p>
   </div>
 </footer>
 
