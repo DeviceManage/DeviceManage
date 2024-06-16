@@ -84,8 +84,10 @@ public class DeviceController {
             return "error";
         }
         model.addAttribute("device", device);
-        if (siteuser.getUgroup() == -1) model.addAttribute("in_group",'0');
-        else model.addAttribute("in_group",'1');
+        if (siteuser.getUgroup() == -1) model.addAttribute("in_group",0);
+        else model.addAttribute("in_group",1);
+        model.addAttribute("uprivi", uprivi);
+        model.addAttribute("groups", devicegroupService.getAllDevicegroups());
         return "edit-device";  // 返回Thymeleaf模板 'edit-device.html'
     }
 
@@ -126,10 +128,15 @@ public class DeviceController {
             updatedDevice.setDprivi(0);
             updatedDevice.setDgroup(-1);
         }
-        else{
+        else if (uprivi != 7) {
             int ugroup = siteuser.getUgroup();
             updatedDevice.setDprivi(uprivi);
             updatedDevice.setDgroup(ugroup);
+        }
+        else {
+            int pri = Integer.parseInt(dprivi);
+            updatedDevice.setDprivi(3);
+            updatedDevice.setDgroup(pri);
         }
         if(updatedDevice.getDimage()==null){
             deviceService.getDeviceById(id).ifPresent(_device -> updatedDevice.setDimage(_device.getDimage()));
@@ -165,13 +172,17 @@ public class DeviceController {
         int dstate = 0;
         String requested_privi = request.getParameter("dprivi");
 
-        if (requested_privi.equals("1")){ // 上传到本实验室
+        if (requested_privi.equals("0")) {
+            dgroup = -1;
+            dprivi = 0;
+        }
+        else if (siteuser.getUprivi() != 7){ // 上传到本实验室
             dgroup = siteuser.getUgroup();
             dprivi = siteuser.getUprivi();
         }
-        else{ // 上传为公开设备
-            dgroup = -1;
-            dprivi = 0;
+        else{
+            dgroup = Integer.parseInt(requested_privi);
+            dprivi = 3;
         }
 
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
@@ -218,8 +229,10 @@ public class DeviceController {
             model.addAttribute("ret","/main");
             return "error";
         }
-        if (siteuser.getUgroup() == -1) model.addAttribute("in_group",'0');
-        else model.addAttribute("in_group",'1');
+        if (siteuser.getUgroup() == -1) model.addAttribute("in_group",0);
+        else model.addAttribute("in_group",1);
+        model.addAttribute("uprivi", uprivi);
+        model.addAttribute("groups", devicegroupService.getAllDevicegroups());
         return "upload";
     }
 

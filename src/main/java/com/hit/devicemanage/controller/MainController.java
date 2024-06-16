@@ -60,6 +60,7 @@ public class MainController {
         List<Device> devices = deviceService.getAllDevices();
         if (uprivi == 7) model.addAttribute("devices", devices);
         else model.addAttribute("devices", deviceService.getDeviceByGroup(ugroup));
+        model.addAttribute("uprivi", uprivi);
         return "main.html";
     }
 

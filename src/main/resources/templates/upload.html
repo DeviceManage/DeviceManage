@@ -124,7 +124,8 @@
                                     <label for="dprivi" class="form-label">权限:</label>
                                     <select id="dprivi" class="form-select" name="dprivi">
                                         <option value="0" >公开</option>
-                                        <option value="1" th:if="${in_group=='1'}">仅本实验室</option>
+                                        <option value="1" th:if="${in_group==1 && uprivi!=7}">仅本实验室</option>
+                                        <option th:each="group : ${groups}" th:value="${group.getGid()}" th:text="${group.getGname()}" th:if="${uprivi == 7}"></option>
                                     </select>
                                 </div>
                                 <button type="submit" class="btn btn-primary mb-3 float-md-none" >
