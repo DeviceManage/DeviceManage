@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Root</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+    <style>
+        body {
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; /* 改成顶部对齐 */
+            height: 100vh;
+            margin: 0;
+            padding: 20px;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            overflow: hidden;
+        }
+        .table-container {
+            margin-top: 20px;
+            max-height: 70vh; /* 限制表格容器高度 */
+            overflow-y: auto; /* 使表格容器可垂直滚动 */
+        }
+        .ui.header {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<div class="ui container">
+    <div class="ui raised segment">
+        <h2 class="ui header">Admin Dashboard</h2>
+        <div class="table-container">
+            <h3>Create New Group</h3>
+            <form th:action="@{/admin/createGroup}" method="post" class="ui form">
+                <div class="field">
+                    <label>Group Name</label>
+                    <input type="text" name="groupname" placeholder="Enter Group Name" required>
+                </div>
+                <button type="submit" class="ui button">Create Group</button>
+            </form>
+        </div>
+        <div>
+            <h3>组管理</h3>
+            <table class="ui celled table">
+                <thead>
+                <tr>
+                    <th>Group ID</th>
+                    <th>Group Name</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="group : ${groups}">
+                    <td th:text="${group.gid}"></td>
+                    <td th:text="${group.gname}"></td>
+                    <td>
+                        <a th:href="@{/admin/group/{groupId}(groupId=${group.gid})}" class="ui button">Manage</a>
+                        <form th:action="@{/admin/deleteGroup}" method="post" style="display: inline;">
+                            <input type="hidden" name="groupId" th:value="${group.gid}" />
+                            <button type="submit" class="ui red button">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="table-container">
+            <h3>无组别人员</h3>
+            <table class="ui celled table">
+                <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Current Group</th>
+                    <th>Current Privilege</th>
+                    <th>Set New Group</th>
+                    <th>New Privilege</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="user : ${ungroupedUsers}">
+                    <td th:text="${user.uname}"></td>
+                    <td th:text="${user.ugroup == -1 ? 'None' : user.ugroup}"></td>
+                    <td th:text="${user.uprivi}"></td>
+                    <td>
+                        <form th:action="@{/admin/modifyUser}" method="post" class="ui form" style="display:inline-block;">
+                            <input type="hidden" name="userId" th:value="${user.uid}" />
+                            <select name="groupId" class="ui dropdown">
+                                <option value="-1">--</option>
+                                <option th:each="group : ${groups}" th:value="${group.gid}" th:text="${group.gname}"></option>
+                            </select>
+                    </td>
+                    <td>
+                        <select name="uprivi" class="ui dropdown">
+                            <option value="0">View(0)</option>
+                            <option value="3">Edit(3)</option>
+                            <option value="5">Admin(5)</option>
+                            <option value="7">SuperAdmin(7)</option>
+                        </select>
+                    </td>
+                    <td>
+                        <button type="submit" class="ui button">Modify User</button>
+                        </form>
+                        <form th:action="@{/admin/removeUser}" method="post" class="ui form" style="display:inline-block;">
+                            <input type="hidden" name="userId" th:value="${user.uid}" />
+                            <button type="submit" class="ui button">Remove</button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- 引入 Semantic UI JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+</body>
+</html>

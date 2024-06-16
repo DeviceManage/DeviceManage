@@ -1,6 +1,7 @@
 package com.hit.devicemanage.controller;
 
 import com.hit.devicemanage.service.DeviceService;
+import com.hit.devicemanage.service.DevicegroupService;
 import com.hit.devicemanage.service.SiteuserService;
 import com.hit.devicemanage.entity.Siteuser;
 
@@ -17,6 +18,8 @@ public class IndexController {
     private DeviceService deviceService;
     @Autowired
     private SiteuserService siteuserService;
+    @Autowired
+    private DevicegroupService devicegroupService;
 
     @GetMapping("/")
     public String index(Model model, HttpSession session, HttpServletRequest request) {
@@ -26,7 +29,14 @@ public class IndexController {
         }
         else{
             model.addAttribute("isuser", "true");
+            model.addAttribute("username", username);
         }
+        Siteuser user = siteuserService.findByUname(username);
+        if (user != null && user.getUprivi() >= 5) {
+            model.addAttribute("ispriv", "true");
+            model.addAttribute("groupname", user.getUgroup()==-1?"None":devicegroupService.getDevicegroupById(user.getUgroup()).get().getGname());
+        }
+        else model.addAttribute("ispriv", "false");
         return "index";
     }
 

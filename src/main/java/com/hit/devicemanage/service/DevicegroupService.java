@@ -27,4 +27,12 @@ public class DevicegroupService {
     public Devicegroup findDevicegroupByGcode(String gcode) {
         return devicegroupRepository.findByGcode(gcode);
     }
+
+    public void saveDevicegroup(Devicegroup group) {
+        devicegroupRepository.save(group);
+    }
+
+    public void deleteDevicegroupById(int groupId) {
+        devicegroupRepository.deleteById(groupId);
+    }
 }

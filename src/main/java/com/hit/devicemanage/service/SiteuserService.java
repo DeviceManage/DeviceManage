@@ -19,7 +19,8 @@ public class SiteuserService {
     public List<Siteuser> getAllUser() { return siteuserRepository.findAll(); }
 
     public Siteuser findByUname(String uname) { return siteuserRepository.findByUname(uname); }
-
+    public List<Siteuser> findByGroup(Integer ugroup) { return siteuserRepository.findByUgroup(ugroup); }
+    public Siteuser findByUid(Integer uid) { return siteuserRepository.findById(uid).get(); }
     public Siteuser updateUser(Integer id, Siteuser updateuser ) {
         return siteuserRepository.findById(id).map(siteuser ->{
             siteuser.setUname(updateuser.getUname());
@@ -36,6 +37,7 @@ public class SiteuserService {
     public void saveSiteuser(Siteuser siteuser) {
         siteuserRepository.save(siteuser);
     }
+    public void deleteSiteuserByUid(Integer uid) { siteuserRepository.deleteById(uid); }
 
     public void newUser(String uname, String upasswd, Integer ugroup, Integer uprivi) {
         Siteuser siteuser = new Siteuser();

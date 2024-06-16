@@ -100,7 +100,7 @@ public class MainController {
             return "redirect:/";
         }
         int ugroup = Math.toIntExact(dgroup.getGid());
-        int uprivi = 3;
+        int uprivi = 0;
         siteuser.setUgroup(ugroup);
         siteuser.setUprivi(uprivi);
         siteuserService.saveSiteuser(siteuser);

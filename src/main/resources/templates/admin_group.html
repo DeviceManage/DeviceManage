@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Group Admin</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+</head>
+<body>
+<div class="ui container">
+    <div class="ui raised segment">
+        <h2 class="ui header">Group Administration</h2>
+        <h3>Group Information</h3>
+        <form th:action="@{/admin/group/{groupId}/updateGroupName(groupId=${group.gid})}" method="post" class="ui form">
+            <div class="field">
+                <label>Group Name</label>
+                <input type="text" name="groupName" th:value="${group.gname}" placeholder="Enter new group name">
+            </div>
+            <button type="submit" class="ui button">Update Group Name</button>
+        </form>
+
+        <h3>Generate Invitation Code</h3>
+        <form th:action="@{/admin/group/{groupId}/generateInvite(groupId=${group.gid})}" method="post">
+            <button type="submit" class="ui button">Generate Invitation Code</button>
+        </form>
+        <p th:text="'Current Invitation Code: ' + ${group.gcode}"></p>
+
+        <h3>Group Members</h3>
+        <table class="ui celled table">
+            <thead>
+            <tr>
+                <th>Username</th>
+                <th>Privilege</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="member : ${groupMembers}">
+                <td th:text="${member.uname}"></td>
+                <td>
+                    <form th:action="@{/admin/group/{groupId}/updateUser(groupId=${group.gid})}" method="post" class="ui form">
+                        <input type="hidden" name="userId" th:value="${member.uid}" />
+                        <select name="uprivi" class="ui dropdown">
+                            <option th:value="0" th:selected="${member.uprivi == 0}">View</option>
+                            <option th:value="3" th:selected="${member.uprivi == 3}">Edit</option>
+                            <option th:value="5" th:selected="${member.uprivi == 5}">Admin</option>
+                        </select>
+                        <button type="submit" class="ui button">Update</button>
+                    </form>
+                </td>
+                <td>
+                    <form th:action="@{/admin/group/{groupId}/removeUser(groupId=${group.gid})}" method="post" class="ui form">
+                        <input type="hidden" name="userId" th:value="${member.uid}" />
+                        <button type="submit" class="ui button">Remove</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

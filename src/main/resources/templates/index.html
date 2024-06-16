@@ -8,11 +8,8 @@
     <meta name="generator" content="Hugo 0.88.1">
     <title>科研设备管理网站</title>
 
-
-
     <!-- Bootstrap core CSS -->
-    <!-- CSS -->
-    <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.2.3/css/bootstrap.min.css" rel="stylesheet"  crossorigin="anonymous">
+    <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.2.3/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
     <style>
         .bd-placeholder-img {
             font-size: 1.125rem;
@@ -28,8 +25,6 @@
             }
         }
     </style>
-
-
 </head>
 <body>
 
@@ -39,14 +34,15 @@
             <div class="row">
                 <div class="col-sm-8 col-md-7 py-4">
                     <h4 class="text-white">关于我们</h4>
-                    <p class="text-muted">这是一个科研设备管理网站的主页，请联系管理员以认证身份</p>
+                    <p class="text-muted">这是一个科研设备管理网站的主页，请联系管理员以认证身份。</p>
                 </div>
                 <div class="col-sm-4 offset-md-1 py-4">
                     <h4 class="text-white">联系我们
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chat-dots" viewBox="0 0 16 16">
                             <path d="M5 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm3 1a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/>
                             <path d="m2.165 15.803.02-.004c1.83-.363 2.948-.842 3.468-1.105A9.06 9.06 0 0 0 8 15c4.418 0 8-3.134 8-7s-3.582-7-8-7-8 3.134-8 7c0 1.76.743 3.37 1.97 4.6a10.437 10.437 0 0 1-.524 2.318l-.003.011a10.722 10.722 0 0 1-.244.637c-.079.186.074.394.273.362a21.673 21.673 0 0 0 .693-.125zm.8-3.108a1 1 0 0 0-.287-.801C1.618 10.83 1 9.468 1 8c0-3.192 3.004-6 7-6s7 2.808 7 6c0 3.193-3.004 6-7 6a8.06 8.06 0 0 1-2.088-.272 1 1 0 0 0-.711.074c-.387.196-1.24.57-2.634.893a10.97 10.97 0 0 0 .398-2z"/>
-                        </svg></h4>
+                        </svg>
+                    </h4>
                     <ul class="list-unstyled">
                         <li><a href="#" class="text-white">Follow on Tieba</a></li>
                         <li><a href="#" class="text-white">Like on Redbook</a></li>
@@ -56,27 +52,30 @@
             </div>
         </div>
     </div>
-    <!-- {% if User %} -->
-    <!-- {% endif %} -->
+
     <div class="navbar navbar-dark bg-dark shadow-sm">
         <div class="container">
             <a href="../index" class="navbar-brand d-flex align-items-center">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-cart" viewBox="0 0 16 16">
                     <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
                 </svg>
-                <!-- <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" aria-hidden="true" class="me-2" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg> -->
                 <strong>&nbsp;主页</strong>
             </a>
-            <div th:if="${isuser=='true'}">
-                <a class="btn btn-outline-primary" href="/main" role="button" style="float: right;" >管理主页</a>
-            </div>
-            <div class="alert alert-secondary" role="alert" style="margin-top: 20px;">
-                HIT 科研设备管理网站
-            </div>
-            <!--/*@thymesVar id="isuser" type="String"*/-->
-            <div th:if="${isuser=='true'}">
-<!--               <a class="btn btn-outline-primary" href="../editpwd" role="button" style="float: right;">修改密码</a> &ndash;&gt;-->
-                <a class="btn btn-outline-danger" href="/reset_sessions" role="button" style="float: right;" >退出登录</a>
+            <!-- 显示用户信息 -->
+            <div class="d-flex">
+                <div class="text-white me-3">
+                    <span th:text="'Username: ' + ${username}"></span>
+                    <span th:text="' | Group: ' + (${groupname})"></span>
+                </div>
+                <div th:if="${isuser=='true'}">
+                    <a class="btn btn-outline-primary me-2" href="/main" role="button">管理主页</a>
+                </div>
+                <div th:if="${ispriv.equals('true')}">
+                    <a class="btn btn-outline-warning me-2" href="/admin" role="button">后台管理</a>
+                </div>
+                <div th:if="${isuser=='true'}">
+                    <a class="btn btn-outline-danger" href="/reset_sessions" role="button">退出登录</a>
+                </div>
             </div>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -86,7 +85,6 @@
 </header>
 
 <main>
-
     <section class="py-5 text-center container">
         <div class="row py-lg-5">
             <div class="col-lg-6 col-md-8 mx-auto">
@@ -98,22 +96,17 @@
                         <a href="/register" class="btn btn-secondary my-2">注册账号</a>
                     </p>
                 </div>
-
-                <!-- {% endif %} -->
             </div>
         </div>
     </section>
 
     <div class="album py-5 bg-light">
         <div class="container">
-
             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-
-
+                <!-- 设备内容可以在这里添加 -->
             </div>
         </div>
     </div>
-
 </main>
 
 <footer class="text-muted py-5">
@@ -125,10 +118,8 @@
     </div>
 </footer>
 
-
 <!-- jQuery and JavaScript Bundle with Popper -->
-<script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.2.3/js/bootstrap.bundle.min.js"  crossorigin="anonymous"></script>
-
+<script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.2.3/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 
 </body>
 </html>

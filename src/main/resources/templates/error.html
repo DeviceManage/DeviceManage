@@ -32,7 +32,8 @@
     <div class="ui raised red segment">
         <h2 class="ui header">Error</h2>
         <p th:text="${err}"></p>
-        <a th:href="${ret}" class="ui fluid primary button">Return</a>
+        <a th:if="${ret}" th:href="${ret}" class="ui fluid primary button">Return</a>
+        <a th:unless="${ret}" th:href="@{ / }" class="ui fluid primary button">Return</a>
     </div>
 </div>
 
