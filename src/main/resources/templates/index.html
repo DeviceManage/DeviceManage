@@ -74,6 +74,9 @@
                     <a class="btn btn-outline-warning me-2" href="/admin" role="button">后台管理</a>
                 </div>
                 <div th:if="${isuser=='true'}">
+                    <a class="btn btn-outline-danger" href="/resetpassword" role="button">重置密码</a>
+                </div>
+                <div th:if="${isuser=='true'}">
                     <a class="btn btn-outline-danger" href="/reset_sessions" role="button">退出登录</a>
                 </div>
             </div>

@@ -112,7 +112,38 @@ public class IndexController {
         return "redirect:/";
     }
 
+    @GetMapping("/resetpassword")
+    public String resetPassword(Model model, HttpSession session, HttpServletRequest request) {
+        String username = (String) session.getAttribute("username");
+        if (username == null) {
+            return "redirect:/login";
+        }
+        Siteuser siteuser = siteuserService.findByUname(username);
+        if (siteuser == null) {
+            return "redirect:/login";
+        }
+        return "resetpassword";
+    }
 
+    @PostMapping("/resetpassword")
+    public String resetPasswordCheck(Model model, HttpSession session, HttpServletRequest request) {
+        String username = (String) session.getAttribute("username");
+        if (username == null) {
+            return "redirect:/login";
+        }
+        Siteuser siteuser = siteuserService.findByUname(username);
+        if (siteuser == null) {
+            return "redirect:/login";
+        }
+        String oldpwd = request.getParameter("oldpwd");
+        String newpwd = request.getParameter("newpwd");
+        if (!siteuser.getUpasswd().equals(oldpwd)) {
+            return "redirect:/resetpassword?iserr=1";
+        }
+        siteuser.setUpasswd(newpwd);
+        siteuserService.saveSiteuser(siteuser);
+        return resetSessions(session, request);
+    }
 
     @GetMapping("/index")
     public String index2(Model model, HttpSession session, HttpServletRequest request) {
