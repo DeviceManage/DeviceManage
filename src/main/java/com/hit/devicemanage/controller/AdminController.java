@@ -220,8 +220,7 @@ public class AdminController {
     }
 
     private String generateInvitationCode() {
-        // 生成随机邀请码的逻辑
-        return UUID.randomUUID().toString().replaceAll("-", "").substring(0, 8); // 示例
+        return UUID.randomUUID().toString().replaceAll("-", "").substring(0, 8);
     }
 
     @PostMapping("/modifyUser")

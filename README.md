@@ -91,15 +91,15 @@ Spring Boot + Thymeleaf + PostgreSQL
 
 #### IndexController `/`
 
-根路由，~~目前直接重定向到`/devices/`，后续需要加入身份验证等功能~~
+根路由
 
-5.29 edit: 已实现注册登录功能
-
++ `/` 主页
 + `/register` 注册前端
 + `/register/check` 注册接口
 + `/login` 登录前端
 + `/login/check` 登录接口
 + `/reset_sessions` 清理注册登录session
++ `/resetpassword` 重置密码（get，post）
 
 #### ImageController `/getimage/{hash}`
 
@@ -119,7 +119,20 @@ Spring Boot + Thymeleaf + PostgreSQL
 + `/join` 加入实验组，get返回静态html，post处理请求
 + `/reset_group` 退出实验组接口
 
-6.14 edit：加入join和reset接口
+#### AdminController `/admin`
+
+后台管理路由
+
++ `/` 后台主页，超级管理员可查看，组管理员访问时跳转到对应group管理页
++ `/createGroup` 组新建接口，指定组名，自动生成邀请码
++ `deleteGroup` 组删除接口，删除时会释放组内成员到无组别
++ `/group/{gid}` 组管理页
++ `/group/{gid}/updateUser` 组内成员权限修改
++ `/group/{gid}/removeUser` 组内踢出成员
++ `/group/{gid}/updateGroupName` 组名修改
++ `/group/{gid}/generateInvite` 邀请码生成接口（不返回字符串，存到数据库里，可以在组管理页面上查看）
++ `/modifyUser` 无组别人员信息修改接口（权限，所属组）
++ `/remoeUser` 无组别人员账号注销接口
 
 #### 注释
 
