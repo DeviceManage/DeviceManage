@@ -32,7 +32,7 @@
             <p><strong>类型:</strong> <span th:text="${device.getTypeName()}"></span></p>
             <p><strong>购入日期:</strong> <span th:text="${device.formattedBuydate}"></span></p>
             <p><strong>详细信息:</strong> <span th:text="${device.detail}"></span></p>
-            <p><strong>权限:</strong> <span th:text="${device.dprivi == 0} ? '公开' : '仅本实验室可访问'"></span></p>
+            <p><strong>归属:</strong> <span th:text="${device.dprivi == 0} ? '公开' : ${group}"></span></p>
             <div class="text-center">
                 <img th:src="@{'/getimage/' + ${device.dimage}}" alt="设备图片" class="img-fluid" style="max-width: 300px;">
             </div>

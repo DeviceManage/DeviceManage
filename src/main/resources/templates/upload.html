@@ -98,8 +98,12 @@
                                     <label for="dname">设备名字</label>
                                 </div>
                                 <div class="form-floating mb-3">
-                                    <input type="text" class="form-control" id="dtype" placeholder="2" name="dtype">
-                                    <label for="dtype">设备类别</label>
+                                    <select id="dtype" class="form-select" name="dtype">
+                                        <option th:value="0" th:text="'设备'"></option>
+                                        <option th:value="1" th:text="'家具'"></option>
+                                        <option th:value="2" th:text="'其他'"></option>
+                                    </select>
+                                    <label for="dtype">设备类别:</label>
                                 </div>
                                 <div class="mb-3">
                                     <label for="dimage">图片:</label>

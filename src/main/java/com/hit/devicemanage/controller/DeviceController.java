@@ -4,6 +4,7 @@ import com.hit.devicemanage.entity.Device;
 import com.hit.devicemanage.entity.Siteuser;
 import com.hit.devicemanage.service.DeviceService;
 
+import com.hit.devicemanage.service.DevicegroupService;
 import com.hit.devicemanage.service.SiteuserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -24,6 +25,7 @@ import java.security.NoSuchAlgorithmException;
 import java.time.Instant;
 import java.util.Formatter;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/devices")
@@ -32,6 +34,8 @@ public class DeviceController {
     DeviceService deviceService;
     @Autowired
     private SiteuserService siteuserService;
+    @Autowired
+    private DevicegroupService devicegroupService;
 
 //    @GetMapping("/devices")
 //    public String index(Model model) {
@@ -41,77 +45,105 @@ public class DeviceController {
 //    }
     // 查询单个设备
     @GetMapping("/{id}")
-    public String getDeviceById(@PathVariable Long id, Model model) {
+    public String getDeviceById(@PathVariable Integer id, Model model, HttpSession session) {
+        String username = (String) session.getAttribute("username");
+        if (username == null) {
+            return "redirect:/";
+        }
         Device device = deviceService.getDeviceById(id).orElse(null);
+        Siteuser user = siteuserService.findByUname(username);
+        if (user.getUgroup() != device.getDgroup() && device.getDgroup() != -1 && user.getUprivi() != 7) {
+            model.addAttribute("err","无权访问");
+            model.addAttribute("ret","/main");
+            return "error";
+        }
         model.addAttribute("device", device);
+        if (device.getDgroup() != -1)
+        model.addAttribute("group", devicegroupService.getDevicegroupById(device.getDgroup()).get().getGname());
+        else model.addAttribute("group","");
         return "device-detail";  // 返回Thymeleaf模板
     }
 
     @GetMapping("/edit/{id}")
-    public String showEditForm(@PathVariable("id") Long id, Model model, HttpSession session) {
+    public String showEditForm(@PathVariable("id") Integer id, Model model, HttpSession session) {
         Device device = deviceService.getDeviceById(id).orElseThrow(() -> new IllegalArgumentException("Invalid device Id: " + id));
-        model.addAttribute("device", device);
-        String username = session.getAttribute("username").toString();
-        if (username == null){
-            return "redirect:/login";
+        String username = (String) session.getAttribute("username");
+        if (username == null) {
+            return "redirect:/";
         }
         Siteuser siteuser = siteuserService.findByUname(username);
+        if (siteuser.getUgroup() != device.getDgroup() && device.getDgroup() != -1 && siteuser.getUprivi() != 7) {
+            model.addAttribute("err","无权访问");
+            model.addAttribute("ret","/main");
+            return "error";
+        }
         int uprivi = siteuser.getUprivi();
-        if(uprivi == 0) {
-            model.addAttribute("in_group", "0");
+        if (uprivi == 0) {
+            model.addAttribute("err","无权编辑");
+            model.addAttribute("ret","/devices/"+id.toString());
+            return "error";
         }
-        else{
-            model.addAttribute("in_group", "1");
-        }
+        model.addAttribute("device", device);
+        if (siteuser.getUgroup() == -1) model.addAttribute("in_group",'0');
+        else model.addAttribute("in_group",'1');
         return "edit-device";  // 返回Thymeleaf模板 'edit-device.html'
     }
 
     @PostMapping("/edit/{id}")
-    public String updateDevice(@PathVariable("id") Long id, @ModelAttribute("device") Device updatedDevice,
-                               @RequestParam("image") MultipartFile imageFile,HttpSession session, HttpServletRequest request) throws Exception{
+    public String updateDevice(@PathVariable("id") Integer id, @ModelAttribute("device") Device updatedDevice,
+                               @RequestParam("image") MultipartFile imageFile,HttpSession session, HttpServletRequest request, Model model) throws Exception{
+        Device device = deviceService.getDeviceById(id).orElseThrow(() -> new IllegalArgumentException("Invalid device Id: " + id));
+        String username = (String) session.getAttribute("username");
+        if (username == null) {
+            return "redirect:/";
+        }
+        Siteuser siteuser = siteuserService.findByUname(username);
+        if (siteuser.getUgroup() != device.getDgroup() && device.getDgroup() != -1 && siteuser.getUprivi() != 7) {
+            model.addAttribute("err","无权访问");
+            model.addAttribute("ret","/main");
+            return "error";
+        }
+        int uprivi = siteuser.getUprivi();
+        if (uprivi == 0) {
+            model.addAttribute("err","无权编辑");
+            model.addAttribute("ret","/devices/"+id.toString());
+            return "error";
+        }
+        if (!imageFile.isEmpty()) {
+            // 生成文件名
+            String hash = hashTimestampAndFileName(Instant.now().toString() + imageFile.getOriginalFilename());
+            String fileName = hash + ".jpg";
+            Path filePath = Paths.get("src/main/resources/static/images/" + fileName);
 
-            if (!imageFile.isEmpty()) {
-                // 生成文件名
-                String hash = hashTimestampAndFileName(Instant.now().toString() + imageFile.getOriginalFilename());
-                String fileName = hash + ".jpg";
-                Path filePath = Paths.get("src/main/resources/static/images/" + fileName);
+            // 保存文件到指定目录
+            Files.write(filePath, imageFile.getBytes());
 
-                // 保存文件到指定目录
-                Files.write(filePath, imageFile.getBytes());
-
-                // 更新设备的dimage字段
-                updatedDevice.setDimage(hash);
-            }
-            String dprivi = request.getParameter("dprivi");
-            if (dprivi.equals("0")) {
-                updatedDevice.setDprivi(0);
-                updatedDevice.setDgroup(-1);
-            }
-            else{
-                String username = session.getAttribute("username").toString();
-                if(username == null){
-                    return "redirect:/login";
-                }
-                Siteuser siteuser = siteuserService.findByUname(username);
-                int uprivi = siteuser.getUprivi();
-                int ugroup = siteuser.getUgroup();
-                updatedDevice.setDprivi(uprivi);
-                updatedDevice.setDgroup(ugroup);
-            }
-            if(updatedDevice.getDimage()==null){
-                deviceService.getDeviceById(id).ifPresent(device -> updatedDevice.setDimage(device.getDimage()));
-            }
-            if(updatedDevice.getDstate()==null){
-                deviceService.getDeviceById(id).ifPresent(device -> updatedDevice.setDstate(device.getDstate()));
-            }
-            deviceService.updateDevice(id, updatedDevice);
-
+            // 更新设备的dimage字段
+            updatedDevice.setDimage(hash);
+        }
+        String dprivi = request.getParameter("dprivi");
+        if (dprivi.equals("0")) {
+            updatedDevice.setDprivi(0);
+            updatedDevice.setDgroup(-1);
+        }
+        else{
+            int ugroup = siteuser.getUgroup();
+            updatedDevice.setDprivi(uprivi);
+            updatedDevice.setDgroup(ugroup);
+        }
+        if(updatedDevice.getDimage()==null){
+            deviceService.getDeviceById(id).ifPresent(_device -> updatedDevice.setDimage(_device.getDimage()));
+        }
+        if(updatedDevice.getDstate()==null){
+            deviceService.getDeviceById(id).ifPresent(_device -> updatedDevice.setDstate(_device.getDstate()));
+        }
+        deviceService.updateDevice(id, updatedDevice);
 
         return "redirect:/main";  // 重定向到设备列表页面
     }
 
     @PostMapping("/upload/check")
-    public String checkImage(@RequestParam("image") MultipartFile imageFile, HttpSession session, HttpServletRequest request) throws Exception {
+    public String checkImage(@RequestParam("image") MultipartFile imageFile, HttpSession session, HttpServletRequest request, Model model) throws Exception {
         if(session.getAttribute("username") == null) {
             return "redirect:/";
         }
@@ -121,7 +153,11 @@ public class DeviceController {
         if(siteuser == null) {
             return "redirect:/";
         }
-
+        if (siteuser.getUprivi() == 0) {
+            model.addAttribute("err","无权编辑");
+            model.addAttribute("ret","/main");
+            return "error";
+        }
         int dgroup;
         int dprivi;
         String dname = request.getParameter("dname");
@@ -142,14 +178,6 @@ public class DeviceController {
         Date buydate = formatter.parse(request.getParameter("buydate"));
 
         String detail = request.getParameter("detail");
-
-//        System.out.println(buydate);
-//        System.out.println(detail);
-//        System.out.println(dgroup);
-//        System.out.println(dprivi);
-//        System.out.println(dname);
-//        System.out.println(dtype);
-//        System.out.println(dprivi);
 
         Device newdevice = new Device();
         newdevice.setDname(dname);
@@ -178,18 +206,20 @@ public class DeviceController {
 
     @GetMapping("/upload")
     public String uploadDevice(Model model, HttpSession session) {
+        if (session == null) return "redirect:/";
         String username = session.getAttribute("username").toString();
         Siteuser siteuser = siteuserService.findByUname(username);
         if(siteuser == null) {
             return "redirect:/";
         }
         int uprivi = siteuser.getUprivi();
-        if(uprivi == 0) {
-            model.addAttribute("in_group", "0");
+        if (uprivi == 0){
+            model.addAttribute("err","无权编辑");
+            model.addAttribute("ret","/main");
+            return "error";
         }
-        else{
-            model.addAttribute("in_group", "1");
-        }
+        if (siteuser.getUgroup() == -1) model.addAttribute("in_group",'0');
+        else model.addAttribute("in_group",'1');
         return "upload";
     }
 
@@ -209,7 +239,25 @@ public class DeviceController {
     }
 
     @PostMapping("/delete/{id}")
-    public String deleteDevice(@PathVariable("id") Long id) {
+    public String deleteDevice(@PathVariable("id") Integer id, HttpSession session, Model model) {
+        if (session == null) return "redirect:/";
+        String username = session.getAttribute("username").toString();
+        Siteuser siteuser = siteuserService.findByUname(username);
+        if(siteuser == null) {
+            return "redirect:/";
+        }
+        Device device = deviceService.getDeviceById(id).orElseThrow(() -> new IllegalArgumentException("Invalid device Id: " + id));
+        if (siteuser.getUgroup() != device.getDgroup() && device.getDgroup() != -1 && siteuser.getUprivi() != 7) {
+            model.addAttribute("err","无权访问");
+            model.addAttribute("ret","/main");
+            return "error";
+        }
+        int uprivi = siteuser.getUprivi();
+        if (uprivi == 0){
+            model.addAttribute("err","无权编辑");
+            model.addAttribute("ret","/main");
+            return "error";
+        }
         deviceService.deleteDevice(id);
         return "redirect:/main";  // 重定向到设备列表页面
     }

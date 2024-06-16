@@ -20,7 +20,7 @@ public class DevicegroupService {
         return devicegroupRepository.findAll();
     }
 
-    public Optional<Devicegroup> getDevicegroupById(Long id) {
+    public Optional<Devicegroup> getDevicegroupById(Integer id) {
         return devicegroupRepository.findById(id);
     }
 

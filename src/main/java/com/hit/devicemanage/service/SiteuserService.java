@@ -20,7 +20,7 @@ public class SiteuserService {
 
     public Siteuser findByUname(String uname) { return siteuserRepository.findByUname(uname); }
 
-    public Siteuser updateUser(Long id, Siteuser updateuser ) {
+    public Siteuser updateUser(Integer id, Siteuser updateuser ) {
         return siteuserRepository.findById(id).map(siteuser ->{
             siteuser.setUname(updateuser.getUname());
             siteuser.setUpasswd(updateuser.getUpasswd());

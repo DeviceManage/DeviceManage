@@ -10,7 +10,7 @@ import java.util.Date;
 public class Device {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long did;
+    private Integer did;
     private String dname;
     private Integer dtype;
     private String dimage;
@@ -21,7 +21,7 @@ public class Device {
     private Integer dprivi;
     private Integer dstate;
 
-    public Device(Long did, String dname, Integer dtype, String dimage, Date buydate, String detail, Integer dgroup, Integer dprivi, Integer dstate) {
+    public Device(Integer did, String dname, Integer dtype, String dimage, Date buydate, String detail, Integer dgroup, Integer dprivi, Integer dstate) {
         this.did = did;
         this.dname = dname;
         this.dtype = dtype;
@@ -37,11 +37,11 @@ public class Device {
 
     }
 
-    public Long getDid() {
+    public Integer getDid() {
         return did;
     }
 
-    public void setDid(Long did) {
+    public void setDid(Integer did) {
         this.did = did;
     }
 

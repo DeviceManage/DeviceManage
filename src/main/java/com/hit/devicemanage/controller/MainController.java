@@ -41,7 +41,7 @@ public class MainController {
             int ugroup = siteuser.getUgroup();
             model.addAttribute("ugroup",ugroup);
             if (ugroup != -1) {
-                Optional<Devicegroup> dgroup = devicegroupService.getDevicegroupById((long) ugroup);
+                Optional<Devicegroup> dgroup = devicegroupService.getDevicegroupById((Integer) ugroup);
 //                System.out.println(dgroup);
                 if(dgroup.isPresent()) {
 
@@ -58,20 +58,8 @@ public class MainController {
         int uprivi = siteuser.getUprivi();
         int ugroup = siteuser.getUgroup();
         List<Device> devices = deviceService.getAllDevices();
-        List<Device> limit_devices = new ArrayList<Device>();
-
-        for(Device device : devices) {
-            if (device.getDprivi() < uprivi){ // 对于权限低的设备
-                limit_devices.add(device);
-            }
-            if (device.getDprivi() == uprivi){ // 对于同等权限的设备
-                if (device.getDgroup() == ugroup){
-                    limit_devices.add(device);
-                }
-            }
-        }
-
-        model.addAttribute("devices", limit_devices);
+        if (uprivi == 7) model.addAttribute("devices", devices);
+        else model.addAttribute("devices", deviceService.getDeviceByGroup(ugroup));
         return "main.html";
     }
 

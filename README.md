@@ -48,21 +48,21 @@ Spring Boot + Thymeleaf + PostgreSQL
 | buydate | 设备购入日期                          |
 | detail  | 设备说明（型号规格等）                     |
 | dgroup  | 设备所属组  -1表示公共设备                 |
-| dprivi  | 设备权限，暂定0=所有人可访问，3=本组人可访问        |
-| dstate | 设备状况，暂定0=正常，1=报废，2=借出|
+| dprivi  | 设备权限，0=所有人可访问，3=本组人可访问        |
+| dstate | 设备状况，0=正常，1=报废，2=借出|
 
 + 5.29 edit: 加入dgroup 和 dprivi 字段
 + 6.14 edit: 加入dstate字端
 
 #### 用户 siteuser
 
-| 属性      | 说明                       |
-|---------|--------------------------|
-| uid     | 用户id，int值，从0增长，作为用户的统一标识 |
-| uname   | 用户名，限长255字节              |
-| upasswd | 用户密码的散列值(SHA-256)        |
-| ugroup | 用户所属组
-| uprivi | 用户权限，暂定取值为0,3,5          |
+| 属性      | 说明                                |
+|---------|-----------------------------------|
+| uid     | 用户id，int值，从0增长，作为用户的统一标识          |
+| uname   | 用户名，限长255字节                       |
+| upasswd | 用户密码的散列值(SHA-256)                 |
+| ugroup | 用户所属组                             
+| uprivi | 用户权限，0=有权查看，3=有权编辑，5=组管理员，7=超级管理员 |
 
 #### 组 devicegroup
 | 属性      | 说明                       |
@@ -113,7 +113,7 @@ Spring Boot + Thymeleaf + PostgreSQL
 
 #### MainController `/main`
 
-+ `/` 查询所有设备，暂时没加入权限管理
++ `/` 查询所有设备，
 + `/join` 加入实验组，get返回静态html，post处理请求
 + `/reset_group` 退出实验组接口
 

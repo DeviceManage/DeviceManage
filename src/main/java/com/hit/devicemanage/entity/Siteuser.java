@@ -6,14 +6,14 @@ import jakarta.persistence.*;
 public class Siteuser {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long uid;
+    private Integer uid;
 
     private String uname;
     private String upasswd;
     private Integer uprivi;
     private Integer ugroup;
 
-    public Siteuser(Long uid, String uname, String upasswd, Integer uprivi, Integer ugroup) {
+    public Siteuser(Integer uid, String uname, String upasswd, Integer uprivi, Integer ugroup) {
         this.uid = uid;
         this.uname = uname;
         this.upasswd = upasswd;
@@ -24,8 +24,8 @@ public class Siteuser {
 
     }
 
-    public Long getUid() { return uid;}
-    public void setUid(Long uid) { this.uid = uid; }
+    public Integer getUid() { return uid;}
+    public void setUid(Integer uid) { this.uid = uid; }
     public String getUname() { return uname; }
     public void setUname(String uname) { this.uname = uname; }
     public String getUpasswd() { return upasswd; }

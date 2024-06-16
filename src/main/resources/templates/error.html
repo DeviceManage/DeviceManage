@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Error Page</title>
+    <!-- 引入 Semantic UI CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+    <style>
+        body {
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .ui.container {
+            max-width: 500px;
+            width: 30%;
+            padding: 20px;
+        }
+        .ui.segment {
+            width: 100%;
+        }
+        .ui.header {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div class="ui container">
+    <div class="ui raised red segment">
+        <h2 class="ui header">Error</h2>
+        <p th:text="${err}"></p>
+        <a th:href="${ret}" class="ui fluid primary button">Return</a>
+    </div>
+</div>
+
+<!-- 引入 Semantic UI JavaScript（可选） -->
+<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+</body>
+</html>

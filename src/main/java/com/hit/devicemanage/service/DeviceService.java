@@ -20,12 +20,15 @@ public class DeviceService {
     public List<Device> getAllDevices() {
         return deviceRepository.findAll();
     }
+    public List<Device> getDeviceByGroup(Integer group) {
+        return deviceRepository.findByDgroup(group);
+    }
 
-    public Optional<Device> getDeviceById(Long id) {
+    public Optional<Device> getDeviceById(Integer id) {
         return deviceRepository.findById(id);
     }
 
-    public Device updateDevice(Long id, Device updatedevice) {
+    public Device updateDevice(Integer id, Device updatedevice) {
         return deviceRepository.findById(id).map(device -> {
             device.setDname(updatedevice.getDname());
             device.setDtype(updatedevice.getDtype());
@@ -46,7 +49,7 @@ public class DeviceService {
         deviceRepository.save(device);
     }
 
-    public void deleteDevice(Long id) {
+    public void deleteDevice(Integer id) {
         deviceRepository.deleteById(id);
     }
 }
