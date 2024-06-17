@@ -119,7 +119,7 @@ Spring Boot + Thymeleaf + PostgreSQL
 + `/` 查询所有设备，
 + `/join` 加入实验组，get返回静态html，post处理请求
 + `/reset_group` 退出实验组接口
-
++ `/statistics` 列出统计数据
 #### AdminController `/admin`
 
 后台管理路由
