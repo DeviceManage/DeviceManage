@@ -42,6 +42,8 @@ public class DeviceService {
             device.setDprivi(updatedevice.getDprivi());
             device.setDstate(updatedevice.getDstate());
 
+            device.setTmpgid(updatedevice.getTmpgid()); // maybe a BUG
+
             return deviceRepository.save(device);
         }).orElseGet(() -> {
             updatedevice.setDid(id); // just to ensure correct ID in case of creation

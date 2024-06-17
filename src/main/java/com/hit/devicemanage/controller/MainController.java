@@ -125,4 +125,44 @@ public class MainController {
         return "redirect:/main";
     }
 
+    @GetMapping("/main/statistics")
+    public String statistics(Model model, HttpSession session, HttpServletRequest request) {
+        String username = (String) session.getAttribute("username");
+        if (username == null) {
+            return "redirect:/";
+        }
+        Siteuser siteuser = siteuserService.findByUname(username);
+        int ugroup = siteuser.getUgroup();
+        int uprivi = siteuser.getUprivi();
+        List<Device> devices;
+        if (uprivi == 7) devices = deviceService.getAllDevices();
+        else devices =  deviceService.getDeviceByGroup(ugroup);
+
+        int scrap_count = 0;
+        int lend_count = 0;
+        int total_count = 0;
+        int public_count = 0;
+        int normal_count = 0;
+
+        for (Device device : devices) {
+            total_count += 1;
+            if ( device.getDstate() == 1){
+                scrap_count += 1;
+            }
+            if (device.getDstate() == 2){
+                lend_count += 1;
+            }
+            if (device.getDprivi() == 0){
+                public_count += 1;
+            }
+        }
+        normal_count = total_count - (lend_count + scrap_count);
+        model.addAttribute("scrap_count", scrap_count);
+        model.addAttribute("lend_count", lend_count);
+        model.addAttribute("public_count", public_count);
+        model.addAttribute("normal_count", normal_count);
+        model.addAttribute("total_count", total_count);
+
+        return "statistics.html";
+    }
 }

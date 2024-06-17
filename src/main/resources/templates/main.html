@@ -88,6 +88,7 @@
 <main>
   <div class="p-2 d-flex">
     <a href="/" class="float-lg-left p-2"><button type="submit" class="btn btn-danger">&nbsp;&nbsp;&nbsp;&nbsp;回到首页&nbsp;&nbsp;&nbsp;&nbsp;</button></a>
+    <a href="/main/statistics" class="ml-auto p-2"><button type="submit" class="btn btn-info">&nbsp;设备统计&nbsp;</button></a>
     <a href="/devices/upload" class="ml-auto p-2"><button type="submit" class="btn btn-primary">&nbsp;上传新设备&nbsp;</button></a>
     <a href="/main/join" methods="get" class="ml-auto p-2" th:if="${ugroup == -1}"><button type="submit" class="btn btn-primary">&nbsp;加入一个实验室&nbsp;</button></a>
     <a href="/main/reset_group" methods="post" class="ml-auto p-2" th:if="${ugroup != -1}"><button type="submit" class="btn btn-primary">&nbsp;退出所属实验室&nbsp;</button></a>

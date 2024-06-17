@@ -18,14 +18,11 @@ import java.net.http.HttpRequest;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.*;
 import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.Instant;
-import java.util.Formatter;
-import java.util.List;
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/devices")
@@ -148,6 +145,18 @@ public class DeviceController {
             updatedDevice.setTmpgid(0);
             if (updatedDevice.getDstate() == 2) updatedDevice.setDstate(0);
         }
+
+        // tring to fix A BUG
+        int tmp_gid = Integer.parseInt(request.getParameter("borrowedGroup"));
+        if (Objects.equals(siteuser.getUgroup(), tmp_gid)){
+            updatedDevice.setDstate(0);
+            updatedDevice.setTmpgid(0);
+        }
+        else{
+            updatedDevice.setDstate(2);
+            updatedDevice.setTmpgid(tmp_gid);
+        }
+
         deviceService.updateDevice(id, updatedDevice);
 
         return "redirect:/main";  // 重定向到设备列表页面
